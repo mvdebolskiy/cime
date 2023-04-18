@@ -23,6 +23,7 @@ from CIME.hist_utils import (
     get_ts_synopsis,
     generate_baseline,
 )
+from CIME.config import Config
 from CIME.provenance import save_test_time, get_test_success
 from CIME.locked_files import LOCKED_DIR, lock_file, is_locked
 import CIME.build as build
@@ -58,6 +59,7 @@ class SystemTestsCommon(object):
         self._ninja = False
         self._dry_run = False
         self._user_separate_builds = False
+        self._expected_num_cmp = None
 
     def _init_environment(self, caseroot):
         """
@@ -253,7 +255,9 @@ class SystemTestsCommon(object):
                     RUN_PHASE, status, comments=("time={:d}".format(int(time_taken)))
                 )
 
-            if get_model() == "e3sm":
+            config = Config.instance()
+
+            if config.verbose_run_phase:
                 # If run phase worked, remember the time it took in order to improve later walltime ests
                 baseline_root = self._case.get_value("BASELINE_ROOT")
                 if success:
@@ -320,7 +324,9 @@ class SystemTestsCommon(object):
                                     )
                                 )
 
-            if get_model() == "cesm" and self._case.get_value("GENERATE_BASELINE"):
+            if config.baseline_store_teststatus and self._case.get_value(
+                "GENERATE_BASELINE"
+            ):
                 baseline_dir = os.path.join(
                     self._case.get_value("BASELINE_ROOT"),
                     self._case.get_value("BASEGEN_CASE"),
@@ -434,7 +440,9 @@ class SystemTestsCommon(object):
         return allgood == 0
 
     def _component_compare_copy(self, suffix):
-        comments = copy_histfiles(self._case, suffix)
+        comments, num_copied = copy_histfiles(self._case, suffix)
+        self._expected_num_cmp = num_copied
+
         append_testlog(comments, self._orig_caseroot)
 
     def _log_cprnc_output_tail(self, filename_pattern, prepend=None):
@@ -467,11 +475,25 @@ class SystemTestsCommon(object):
             diagnostic fields that are missing from the other case), treat the two cases
             as identical.
         """
-        success, comments = self._do_compare_test(
+        success, comments, num_compared = self._do_compare_test(
             suffix1, suffix2, ignore_fieldlist_diffs=ignore_fieldlist_diffs
         )
         if success_change:
             success = not success
+
+        if (
+            self._expected_num_cmp is not None
+            and num_compared is not None
+            and self._expected_num_cmp != num_compared
+        ):
+            comments = comments.replace("PASS", "")
+            comments += """\nWARNING
+Expected to compare {} hist files, but only compared {}. It's possible
+that the hist_file_extension entry in config_archive.xml is not correct
+for some of your components.
+""".format(
+                self._expected_num_cmp, num_compared
+            )
 
         append_testlog(comments, self._orig_caseroot)
 

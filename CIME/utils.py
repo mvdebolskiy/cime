@@ -328,28 +328,13 @@ def copy_local_macros_to_dir(destination, extra_machdir=None):
             local_macros.extend(
                 glob.glob(os.path.join(extra_machdir, "cmake_macros/*.cmake"))
             )
-        elif os.path.isfile(os.path.join(extra_machdir, "config_compilers.xml")):
-            logger.warning(
-                "WARNING: Found directory {} but no cmake macros within, set env variable CIME_NO_CMAKE_MACRO to use deprecated config_compilers method".format(
-                    extra_machdir
-                )
-            )
+
     dotcime = None
     home = os.environ.get("HOME")
     if home:
         dotcime = os.path.join(home, ".cime")
     if dotcime and os.path.isdir(dotcime):
         local_macros.extend(glob.glob(dotcime + "/*.cmake"))
-    if (
-        dotcime
-        and os.path.isfile(os.path.join(dotcime, "config_compilers.xml"))
-        and not local_macros
-    ):
-        logger.warning(
-            "WARNING: Found directory {} but no cmake macros within, set env variable CIME_NO_CMAKE_MACRO to use deprecated config_compilers method".format(
-                dotcime
-            )
-        )
 
     for macro in local_macros:
         safe_copy(macro, destination)
@@ -453,14 +438,16 @@ def get_cime_default_driver():
                 logger.debug(
                     "Setting CIME_driver={} from ~/.cime/config".format(driver)
                 )
+
+    from CIME.config import Config
+
+    config = Config.instance()
+
     if not driver:
-        model = get_model()
-        if model == "ufs" or model == "cesm":
-            driver = "nuopc"
-        else:
-            driver = "mct"
+        driver = config.driver_default
+
     expect(
-        driver in ("mct", "nuopc", "moab"),
+        driver in config.driver_choices,
         "Attempt to set invalid driver {}".format(driver),
     )
     return driver
@@ -646,7 +633,7 @@ def import_and_run_sub_or_cmd(
     try:
         mod = importlib.import_module(f"{compname}_cime_py")
         getattr(mod, subname)(*subargs)
-    except (ModuleNotFoundError, AttributeError) as _:
+    except (ModuleNotFoundError, AttributeError) as e:
         # * ModuleNotFoundError if importlib can not find module,
         # * AttributeError if importlib finds the module but
         #   {subname} is not defined in the module
@@ -654,7 +641,19 @@ def import_and_run_sub_or_cmd(
             os.path.isfile(cmd),
             f"Could not find {subname} file for component {compname}",
         )
-        run_sub_or_cmd(cmd, cmdargs, subname, subargs, logfile, case, from_dir, timeout)
+
+        # TODO shouldn't need to use logger.isEnabledFor for debug logging
+        if isinstance(e, ModuleNotFoundError) and logger.isEnabledFor(logging.DEBUG):
+            logger.info(
+                "WARNING: Could not import module '{}_cime_py'".format(compname)
+            )
+
+        try:
+            run_sub_or_cmd(
+                cmd, cmdargs, subname, subargs, logfile, case, from_dir, timeout
+            )
+        except Exception as e:
+            raise e from None
     except Exception:
         if logfile:
             with open(logfile, "a") as log_fd:
@@ -1289,13 +1288,15 @@ def start_buffering_output():
     sys.stdout = os.fdopen(sys.stdout.fileno(), "w")
 
 
-def match_any(item, re_list):
+def match_any(item, re_counts):
     """
-    Return true if item matches any regex in re_list
+    Return true if item matches any regex in re_counts' keys. Increments
+    count if a match was found.
     """
-    for regex_str in re_list:
+    for regex_str in re_counts:
         regex = re.compile(regex_str)
         if regex.match(item):
+            re_counts[regex_str] += 1
             return True
 
     return False
@@ -2314,16 +2315,16 @@ def get_lids(case):
     return _get_most_recent_lid_impl(glob.glob("{}/{}.log*".format(rundir, model)))
 
 
-def new_lid():
+def new_lid(case=None):
     lid = time.strftime("%y%m%d-%H%M%S")
-    jobid = batch_jobid()
+    jobid = batch_jobid(case=case)
     if jobid is not None:
         lid = jobid + "." + lid
     os.environ["LID"] = lid
     return lid
 
 
-def batch_jobid():
+def batch_jobid(case=None):
     jobid = os.environ.get("PBS_JOBID")
     if jobid is None:
         jobid = os.environ.get("SLURM_JOB_ID")
@@ -2331,6 +2332,8 @@ def batch_jobid():
         jobid = os.environ.get("LSB_JOBID")
     if jobid is None:
         jobid = os.environ.get("COBALT_JOBID")
+    if case:
+        jobid = case.get_job_id(jobid)
     return jobid
 
 
@@ -2475,7 +2478,11 @@ def run_and_log_case_status(
 
 
 def _check_for_invalid_args(args):
-    if get_model() != "e3sm":
+    # Prevent circular import
+    from CIME.config import Config
+
+    # TODO Is this really model specific
+    if Config.instance().check_invalid_args:
         for arg in args:
             # if arg contains a space then it was originally quoted and we can ignore it here.
             if " " in arg or arg.startswith("--"):

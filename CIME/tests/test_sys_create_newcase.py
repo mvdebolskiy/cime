@@ -34,7 +34,7 @@ class TestCreateNewcase(base.BaseTestCase):
             testdir,
             cls._testroot,
         )
-        if utils.get_model() == "cesm":
+        if self._config.allow_unsupported:
             args += " --run-unsupported"
         if self.TEST_COMPILER is not None:
             args = args + " --compiler %s" % self.TEST_COMPILER
@@ -148,7 +148,7 @@ class TestCreateNewcase(base.BaseTestCase):
             " --case %s --compset X --user-mods-dir %s --output-root %s --handle-preexisting-dirs=r"
             % (testdir, user_mods_dir, cls._testroot)
         )
-        if utils.get_model() == "cesm":
+        if self._config.allow_unsupported:
             args += " --run-unsupported"
         if self.TEST_COMPILER is not None:
             args = args + " --compiler %s" % self.TEST_COMPILER
@@ -322,7 +322,7 @@ class TestCreateNewcase(base.BaseTestCase):
 
         cls._testdirs.append(testdir)
 
-        if utils.get_model() == "cesm":
+        if self._config.test_mode == "cesm":
             if utils.get_cime_default_driver() == "nuopc":
                 pesfile = os.path.join(
                     utils.get_src_root(),
@@ -349,7 +349,7 @@ class TestCreateNewcase(base.BaseTestCase):
             "--case %s --compset 2000_SATM_XLND_SICE_SOCN_XROF_XGLC_SWAV  --pesfile %s --res f19_g16 --output-root %s --handle-preexisting-dirs=r"
             % (testdir, pesfile, cls._testroot)
         )
-        if utils.get_model() == "cesm":
+        if self._config.allow_unsupported:
             args += " --run-unsupported"
         if self.TEST_COMPILER is not None:
             args += " --compiler %s" % self.TEST_COMPILER
@@ -382,7 +382,7 @@ class TestCreateNewcase(base.BaseTestCase):
             "--case %s --compset 2000_SATM_XLND_SICE_SOCN_XROF_XGLC_SWAV --pesfile %s --res f19_g16 --output-root %s --handle-preexisting-dirs=r"
             % (testdir, pesfile, cls._testroot)
         )
-        if utils.get_model() == "cesm":
+        if self._config.allow_unsupported:
             args += " --run-unsupported"
         if self.TEST_COMPILER is not None:
             args += " --compiler %s" % self.TEST_COMPILER
@@ -419,7 +419,7 @@ class TestCreateNewcase(base.BaseTestCase):
             " --case CreateNewcaseTest --script-root %s --compset X --output-root %s --handle-preexisting-dirs u"
             % (testdir, cls._testroot)
         )
-        if utils.get_model() == "cesm":
+        if self._config.allow_unsupported:
             args += " --run-unsupported"
         if self.TEST_COMPILER is not None:
             args += " --compiler %s" % self.TEST_COMPILER
@@ -541,7 +541,7 @@ class TestCreateNewcase(base.BaseTestCase):
             args += " --res f19_g17 "
         else:
             args += " --res f19_g16 "
-        if utils.get_model() == "cesm":
+        if self._config.allow_unsupported:
             args += " --run-unsupported"
         if self.TEST_COMPILER is not None:
             args += " --compiler %s" % self.TEST_COMPILER
@@ -582,7 +582,7 @@ class TestCreateNewcase(base.BaseTestCase):
             args += " --res f19_g17 "
         else:
             args += " --res f19_g16 "
-        if utils.get_model() == "cesm":
+        if self._config.allow_unsupported:
             args += " --run-unsupported"
         if self.TEST_COMPILER is not None:
             args += " --compiler %s" % self.TEST_COMPILER
@@ -698,7 +698,7 @@ set(NETCDF_PATH /my/netcdf/path)
                 extra_machines_dir=extra_machines_dir,
             )
         )
-        if utils.get_model() == "cesm":
+        if self._config.allow_unsupported:
             args += " --run-unsupported"
 
         if utils.get_cime_default_driver() == "nuopc":
@@ -731,18 +731,26 @@ set(NETCDF_PATH /my/netcdf/path)
     def test_m_createnewcase_alternate_drivers(self):
         # Test that case.setup runs for nuopc and moab drivers
         cls = self.__class__
-        model = utils.get_model()
-        for driver in ("nuopc", "moab"):
-            if not os.path.exists(
+
+        # TODO refactor
+        if self._config.test_mode == "cesm":
+            alternative_driver = ("nuopc",)
+        else:
+            alternative_driver = ("moab",)
+
+        for driver in alternative_driver:
+            if driver == "moab" and not os.path.exists(
                 os.path.join(utils.get_cime_root(), "src", "drivers", driver)
             ):
                 self.skipTest(
                     "Skipping driver test for {}, driver not found".format(driver)
                 )
-            if (model == "cesm" and driver == "moab") or (
-                model == "e3sm" and driver == "nuopc"
+            if driver == "nuopc" and not os.path.exists(
+                os.path.join(utils.get_src_root(), "components", "cmeps")
             ):
-                continue
+                self.skipTest(
+                    "Skipping driver test for {}, driver not found".format(driver)
+                )
 
             testdir = os.path.join(cls._testroot, "testcreatenewcase.{}".format(driver))
             if os.path.exists(testdir):
@@ -750,7 +758,7 @@ set(NETCDF_PATH /my/netcdf/path)
             args = " --driver {} --case {} --compset X --res f19_g16 --output-root {} --handle-preexisting-dirs=r".format(
                 driver, testdir, cls._testroot
             )
-            if model == "cesm":
+            if self._config.allow_unsupported:
                 args += " --run-unsupported"
             if self.TEST_COMPILER is not None:
                 args = args + " --compiler %s" % self.TEST_COMPILER
@@ -777,7 +785,6 @@ set(NETCDF_PATH /my/netcdf/path)
 
     def test_n_createnewcase_bad_compset(self):
         cls = self.__class__
-        model = utils.get_model()
 
         testdir = os.path.join(cls._testroot, "testcreatenewcase_bad_compset")
         if os.path.exists(testdir):
@@ -786,7 +793,7 @@ set(NETCDF_PATH /my/netcdf/path)
             " --case %s --compset InvalidCompsetName --output-root %s --handle-preexisting-dirs=r "
             % (testdir, cls._testroot)
         )
-        if model == "cesm":
+        if self._config.allow_unsupported:
             args += " --run-unsupported"
         if self.TEST_COMPILER is not None:
             args = args + " --compiler %s" % self.TEST_COMPILER

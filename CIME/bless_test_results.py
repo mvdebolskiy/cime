@@ -3,10 +3,10 @@ from CIME.test_scheduler import NAMELIST_PHASE
 from CIME.utils import (
     run_cmd,
     get_scripts_root,
-    get_model,
     EnvironmentContext,
     parse_test_name,
 )
+from CIME.config import Config
 from CIME.test_status import *
 from CIME.hist_utils import generate_baseline, compare_baseline
 from CIME.case import Case
@@ -36,10 +36,11 @@ def bless_namelists(
     if not report_only and (
         force or input("Update namelists (y/n)? ").upper() in ["Y", "YES"]
     ):
+        config = Config.instance()
 
         create_test_gen_args = " -g {} ".format(
             baseline_name
-            if get_model() == "cesm"
+            if config.create_test_flag_mode == "cesm"
             else " -g -b {} ".format(baseline_name)
         )
         if new_test_root is not None:
@@ -136,6 +137,10 @@ def bless_test_results(
     most_recent = sorted(timestamps)[-1]
     logger.info("Matched test batch is {}".format(most_recent))
 
+    bless_tests_counts = None
+    if bless_tests:
+        bless_tests_counts = dict([(bless_test, 0) for bless_test in bless_tests])
+
     broken_blesses = []
     for test_status_file in test_status_files:
         if not most_recent in test_status_file:
@@ -151,9 +156,7 @@ def bless_test_results(
         if test_name is None:
             case_dir = os.path.basename(test_dir)
             test_name = CIME.utils.normalize_case_id(case_dir)
-            if bless_tests in [[], None] or CIME.utils.match_any(
-                test_name, bless_tests
-            ):
+            if not bless_tests or CIME.utils.match_any(test_name, bless_tests_counts):
                 broken_blesses.append(
                     (
                         "unknown",
@@ -166,8 +169,12 @@ def bless_test_results(
             else:
                 continue
 
-        if bless_tests in [[], None] or CIME.utils.match_any(test_name, bless_tests):
-            overall_result = ts.get_overall_test_status()[0]
+        if bless_tests in [[], None] or CIME.utils.match_any(
+            test_name, bless_tests_counts
+        ):
+            overall_result, phase = ts.get_overall_test_status(
+                ignore_namelists=True, ignore_memleak=True
+            )
 
             # See if we need to bless namelist
             if not hist_only:
@@ -188,13 +195,22 @@ def bless_test_results(
                     )
                     hist_bless = False
                 elif run_result != TEST_PASS_STATUS:
-                    broken_blesses.append((test_name, "test did not pass"))
+                    broken_blesses.append((test_name, "run phase did not pass"))
                     logger.warning(
-                        "Test '{}' did not pass, not safe to bless, test status = {}".format(
+                        "Test '{}' run phase did not pass, not safe to bless, test status = {}".format(
                             test_name, ts.phase_statuses_dump()
                         )
                     )
                     hist_bless = False
+                elif overall_result == TEST_FAIL_STATUS:
+                    broken_blesses.append((test_name, "test did not pass"))
+                    logger.warning(
+                        "Test '{}' did not pass due to phase {}, not safe to bless, test status = {}".format(
+                            test_name, phase, ts.phase_statuses_dump()
+                        )
+                    )
+                    hist_bless = False
+
                 elif no_skip_pass:
                     hist_bless = True
                 else:
@@ -288,6 +304,19 @@ def bless_test_results(
 
                         if not success:
                             broken_blesses.append((test_name, reason))
+
+    # Emit a warning if items in bless_tests did not match anything
+    if bless_tests:
+        for bless_test, bless_count in bless_tests_counts.items():
+            if bless_count == 0:
+                logger.warning(
+                    """
+bless test arg '{}' did not match any tests in test_root {} with
+compiler {} and test_id {}. It's possible that one of these arguments
+had a mistake (likely compiler or testid).""".format(
+                        bless_test, test_root, compiler, test_id
+                    )
+                )
 
     # Make sure user knows that some tests were not blessed
     success = True

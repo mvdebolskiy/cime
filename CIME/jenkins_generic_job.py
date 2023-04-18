@@ -44,11 +44,18 @@ def delete_old_test_data(
             "{}/*{}*{}*".format(clutter_area, mach_comp, test_id_root)
         ):
             if avoid_test_id not in old_file:
-                logging.info("TEST ARCHIVER: Removing {}".format(old_file))
+                logging.info("TEST ARCHIVER: removing {}".format(old_file))
                 if os.path.isdir(old_file):
                     shutil.rmtree(old_file)
                 else:
                     os.remove(old_file)
+
+            else:
+                logging.info(
+                    "TEST ARCHIVER: leaving case {} due to avoiding test id {}".format(
+                        old_file, avoid_test_id
+                    )
+                )
 
 
 ###############################################################################
@@ -156,6 +163,13 @@ def archive_old_test_data(
                             the_dir, int(end_time - start_time)
                         )
                     )
+
+        else:
+            logging.info(
+                "TEST ARCHIVER: leaving case {} due to avoiding test id {}".format(
+                    old_case, avoid_test_id
+                )
+            )
 
     # Check size of archive
     bytes_of_old_test_data = int(
@@ -265,6 +279,8 @@ def jenkins_generic_job(
     check_throughput,
     check_memory,
     pes_file,
+    jenkins_id,
+    queue,
 ):
     ###############################################################################
     """
@@ -304,10 +320,14 @@ def jenkins_generic_job(
     # the Jenkins jobs with timeouts to avoid this.
     #
 
-    test_id_root = "J{}{}".format(
-        baseline_name.capitalize(), test_suite.replace("e3sm_", "").capitalize()
-    )
-    test_id = "%s%s" % (test_id_root, CIME.utils.get_timestamp())
+    if jenkins_id is not None:
+        test_id_root = jenkins_id
+        test_id = "%s%s" % (test_id_root, CIME.utils.get_timestamp("%y%m%d_%H%M%S"))
+    else:
+        test_id_root = "J{}{}".format(
+            baseline_name.capitalize(), test_suite.replace("e3sm_", "").capitalize()
+        )
+        test_id = "%s%s" % (test_id_root, CIME.utils.get_timestamp())
     archiver_thread = threading.Thread(
         target=handle_old_test_data,
         args=(machine, compiler, test_id_root, scratch_root, test_root, test_id),
@@ -347,6 +367,9 @@ def jenkins_generic_job(
 
     if pes_file is not None:
         create_test_args.append(" --pesfile " + pes_file)
+
+    if queue is not None:
+        create_test_args.append(" --queue " + queue)
 
     create_test_cmd = "./create_test " + " ".join(create_test_args)
 

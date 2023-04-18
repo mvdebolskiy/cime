@@ -2,11 +2,11 @@
 Functions for actions pertaining to history files.
 """
 from CIME.XML.standard_module_setup import *
+from CIME.config import Config
 from CIME.test_status import TEST_NO_BASELINES_COMMENT, TEST_STATUS_FILENAME
 from CIME.utils import (
     get_current_commit,
     get_timestamp,
-    get_model,
     safe_copy,
     SharedArea,
     parse_test_name,
@@ -60,6 +60,8 @@ def copy_histfiles(case, suffix):
 
     case - The case containing the files you want to save
     suffix - The string suffix you want to add to saved files, this can be used to find them later.
+
+    returns (comments, num_copied)
     """
     rundir = case.get_value("RUNDIR")
     ref_case = case.get_value("RUN_REFCASE")
@@ -104,7 +106,7 @@ def copy_histfiles(case, suffix):
         "copy_histfiles failed: no hist files found in rundir '{}'".format(rundir),
     )
 
-    return comments
+    return comments, num_copied
 
 
 def rename_all_hist_files(case, suffix):
@@ -265,6 +267,11 @@ def _compare_hists(
     outfile_suffix="",
     ignore_fieldlist_diffs=False,
 ):
+    """
+    Compares two sets of history files
+
+    Returns (success (True if all matched), comments, num_compared)
+    """
     if from_dir1 == from_dir2:
         expect(suffix1 != suffix2, "Comparing files to themselves?")
 
@@ -352,6 +359,7 @@ def _compare_hists(
                         )
 
                 all_success = False
+
     # Some tests don't save history files.
     if num_compared == 0 and testcase not in NO_HIST_TESTS:
         all_success = False
@@ -359,7 +367,7 @@ def _compare_hists(
 
     comments += "PASS" if all_success else "FAIL"
 
-    return all_success, comments
+    return all_success, comments, num_compared
 
 
 def compare_test(case, suffix1, suffix2, ignore_fieldlist_diffs=False):
@@ -374,7 +382,7 @@ def compare_test(case, suffix1, suffix2, ignore_fieldlist_diffs=False):
         diagnostic fields that are missing from the other case), treat the two cases as
         identical.
 
-    returns (SUCCESS, comments)
+    returns (SUCCESS, comments, num_compared)
     """
     rundir = case.get_value("RUNDIR")
 
@@ -517,10 +525,10 @@ def compare_baseline(case, baseline_dir=None, outfile_suffix=""):
                 TEST_NO_BASELINES_COMMENT, bdir
             )
 
-    success, comments = _compare_hists(
+    success, comments, _ = _compare_hists(
         case, rundir, basecmp_dir, outfile_suffix=outfile_suffix
     )
-    if get_model() == "e3sm":
+    if Config.instance().create_bless_log:
         bless_log = os.path.join(basecmp_dir, BLESS_LOG_NAME)
         if os.path.exists(bless_log):
             lines = open(bless_log, "r", encoding="utf-8").readlines()
@@ -536,23 +544,22 @@ def generate_teststatus(testdir, baseline_dir):
     CESM stores it's TestStatus file in baselines. Do not let exceptions
     escape from this function.
     """
-    if get_model() == "cesm":
-        try:
-            with SharedArea():
-                if not os.path.isdir(baseline_dir):
-                    os.makedirs(baseline_dir)
+    try:
+        with SharedArea():
+            if not os.path.isdir(baseline_dir):
+                os.makedirs(baseline_dir)
 
-                safe_copy(
-                    os.path.join(testdir, TEST_STATUS_FILENAME),
-                    baseline_dir,
-                    preserve_meta=False,
-                )
-        except Exception as e:
-            logger.warning(
-                "Could not copy {} to baselines, {}".format(
-                    os.path.join(testdir, TEST_STATUS_FILENAME), str(e)
-                )
+            safe_copy(
+                os.path.join(testdir, TEST_STATUS_FILENAME),
+                baseline_dir,
+                preserve_meta=False,
             )
+    except Exception as e:
+        logger.warning(
+            "Could not copy {} to baselines, {}".format(
+                os.path.join(testdir, TEST_STATUS_FILENAME), str(e)
+            )
+        )
 
 
 def _generate_baseline_impl(case, baseline_dir=None, allow_baseline_overwrite=False):
@@ -646,7 +653,7 @@ def _generate_baseline_impl(case, baseline_dir=None, allow_baseline_overwrite=Fa
         ),
     )
 
-    if get_model() == "e3sm":
+    if Config.instance().create_bless_log:
         bless_log = os.path.join(basegen_dir, BLESS_LOG_NAME)
         with open(bless_log, "a", encoding="utf-8") as fd:
             fd.write(

@@ -159,6 +159,10 @@ OR
     )
 
     parser.add_argument(
+        "-q", "--queue", help="Force create_test to use a specific queue."
+    )
+
+    parser.add_argument(
         "--check-throughput",
         action="store_true",
         help="Fail if throughput check fails (fail if tests slow down)",
@@ -174,6 +178,11 @@ OR
         "--pes-file",
         help="Full pathname of an optional pes specification file. The file"
         "\ncan follow either the config_pes.xml or the env_mach_pes.xml format.",
+    )
+
+    parser.add_argument(
+        "--jenkins-id",
+        help="Specify an 'id' for the Jenkins jobs.",
     )
 
     args = CIME.utils.parse_args_and_handle_standard_logging_options(args, parser)
@@ -244,6 +253,8 @@ OR
         args.check_throughput,
         args.check_memory,
         args.pes_file,
+        args.jenkins_id,
+        args.queue,
     )
 
 
@@ -271,6 +282,8 @@ def _main_func(description):
         check_throughput,
         check_memory,
         pes_file,
+        jenkins_id,
+        queue,
     ) = parse_command_line(sys.argv, description)
 
     sys.exit(
@@ -296,6 +309,8 @@ def _main_func(description):
             check_throughput,
             check_memory,
             pes_file,
+            jenkins_id,
+            queue,
         )
         else CIME.utils.TESTS_FAILED_ERR_CODE
     )

@@ -192,7 +192,7 @@ else
   ifneq ($(MAKECMDGOALS), db_files)
   ifneq ($(MAKECMDGOALS), db_flags)
   ifeq (,$(findstring clean,$(MAKECMDGOALS)))
-      $(error NETCDF not found: Define NETCDF_PATH or NETCDF_C_PATH and NETCDF_FORTRAN_PATH in config_machines.xml or config_compilers.xml)
+      $(error NETCDF not found: Define NETCDF_PATH or NETCDF_C_PATH and NETCDF_FORTRAN_PATH in config_machines.xml or cmake_macros)
   endif
   endif
   endif
@@ -231,7 +231,7 @@ ifeq ($(strip $(USE_PETSC)), TRUE)
 endif
 
 # Set MOAB info if it is being used
-ifeq ($(strip $(USE_MOAB)), TRUE)
+ifeq ($(COMP_INTERFACE), moab)
   ifdef MOAB_PATH
     CPPDEFS += -DHAVE_MOAB
     ifndef INC_MOAB
@@ -241,12 +241,8 @@ ifeq ($(strip $(USE_MOAB)), TRUE)
       LIB_MOAB:=$(MOAB_PATH)/lib
     endif
   else
-    $(error MOAB_PATH must be defined when USE_MOAB is TRUE)
+    $(error MOAB_PATH must be defined when using moab driver)
   endif
-
-  # get the "IMESH_LIBS" list as an env var
-  include $(LIB_MOAB)/iMesh-Defs.inc
-
 endif
 
 # Set HAVE_SLASHPROC on LINUX systems which are not bluegene or Darwin (OSx)
@@ -423,7 +419,7 @@ ifeq ($(COMP_NAME),driver)
   INCLDIR += -I$(EXEROOT)/atm/obj -I$(EXEROOT)/ice/obj -I$(EXEROOT)/ocn/obj -I$(EXEROOT)/glc/obj -I$(EXEROOT)/rof/obj -I$(EXEROOT)/wav/obj -I$(EXEROOT)/esp/obj -I$(EXEROOT)/iac/obj
 # nagfor and gcc have incompatible LDFLAGS.
 # nagfor requires the weird "-Wl,-Wl,," syntax.
-# If done in config_compilers.xml, we break MCT.
+# If done in cmake_macros, we break MCT.
   ifeq ($(strip $(COMPILER)),nag)
      ifeq ($(NETCDF_SEPARATE), false)
        SLIBS += -Wl,-Wl,,-rpath=$(LIB_NETCDF)
@@ -577,12 +573,16 @@ endif
 
 
 # System libraries (netcdf, mpi, pnetcdf, esmf, trilinos, etc.)
-ifeq (,$(findstring lnetcdf,$(SLIBS)))
-  ifeq ($(NETCDF_SEPARATE), FALSE)
-    SLIBS += -L$(LIB_NETCDF) -lnetcdff -lnetcdf
-  else ifeq ($(NETCDF_SEPARATE), TRUE)
-    SLIBS += -L$(LIB_NETCDF_FORTRAN) -L$(LIB_NETCDF_C) -lnetcdff -lnetcdf
+ifeq ($(NETCDF_SEPARATE), FALSE)
+   ifeq (,$(findstring $(LIB_NETCDF),$(SLIBS)))
+      SLIBS += -L$(LIB_NETCDF) -lnetcdff -lnetcdf
   endif
+else ifeq ($(NETCDF_SEPARATE), TRUE)
+    ifeq (,$(findstring $(LIB_NETCDF_C), $(SLIBS)))
+      SLIBS += -L$(LIB_NETCDF_FORTRAN) -L$(LIB_NETCDF_C) -lnetcdff -lnetcdf
+    else ifeq (,$(findstring $(LIB_NETCDF_FOTRAN), $(SLIBS)))
+      SLIBS += -L$(LIB_NETCDF_FORTRAN) -L$(LIB_NETCDF_C) -lnetcdff -lnetcdf
+    endif
 endif
 
 ifdef LAPACK_LIBDIR
@@ -699,6 +699,9 @@ CMAKE_OPTS += -Wno-dev -D CMAKE_Fortran_FLAGS:STRING="$(FFLAGS) $(EXTRA_PIO_FPPD
 	      -D PIO_USE_MALLOC:BOOL=ON \
 	      -D USER_CMAKE_MODULE_PATH:LIST="$(CIMEROOT)/CIME/non_py/src/CMake;$(EXTERN_PATH)/parallelio/cmake"
 
+ifdef ADIOS2_DIR
+	CMAKE_OPTS += -D WITH_ADIOS2:BOOL=ON
+endif
 ifeq ($(DEBUG), TRUE)
   CMAKE_OPTS += -D PIO_ENABLE_LOGGING=ON
 endif
