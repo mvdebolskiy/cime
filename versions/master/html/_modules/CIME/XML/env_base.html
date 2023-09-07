@@ -11,12 +11,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=30d551ce"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../../_static/pop_ver.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -28,14 +27,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> CIME
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            CIME
           </a>
               <div class="version">
                 master
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -69,9 +72,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>CIME.XML.env_base</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">CIME.XML.env_base</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -92,7 +95,9 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="EnvBase"><a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase">[docs]</a><span class="k">class</span> <span class="nc">EnvBase</span><span class="p">(</span><span class="n">EntryID</span><span class="p">):</span>
+<div class="viewcode-block" id="EnvBase">
+<a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase">[docs]</a>
+<span class="k">class</span> <span class="nc">EnvBase</span><span class="p">(</span><span class="n">EntryID</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">case_root</span><span class="p">,</span> <span class="n">infile</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">case_root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">case_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
@@ -142,12 +147,17 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">()</span>
 
-<div class="viewcode-block" id="EnvBase.change_file"><a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.change_file">[docs]</a>    <span class="k">def</span> <span class="nf">change_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newfile</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="EnvBase.change_file">
+<a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.change_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">change_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newfile</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unlock</span><span class="p">()</span>
         <span class="n">EntryID</span><span class="o">.</span><span class="n">change_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newfile</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_cache</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="EnvBase.get_children"><a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.get_children">[docs]</a>    <span class="k">def</span> <span class="nf">get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EnvBase.get_children">
+<a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.get_children">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">locked</span>
             <span class="ow">and</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;entry&quot;</span>
@@ -182,7 +192,10 @@
                 <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EnvBase.scan_children"><a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.scan_children">[docs]</a>    <span class="k">def</span> <span class="nf">scan_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodename</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EnvBase.scan_children">
+<a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.scan_children">[docs]</a>
+    <span class="k">def</span> <span class="nf">scan_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodename</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">locked</span>
             <span class="ow">and</span> <span class="n">nodename</span> <span class="o">==</span> <span class="s2">&quot;entry&quot;</span>
@@ -197,12 +210,18 @@
                 <span class="bp">self</span><span class="p">,</span> <span class="n">nodename</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="n">attributes</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EnvBase.set_components"><a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.set_components">[docs]</a>    <span class="k">def</span> <span class="nf">set_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EnvBase.set_components">
+<a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.set_components">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_components</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_components&quot;</span><span class="p">):</span>
             <span class="c1"># pylint: disable=attribute-defined-outside-init</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_components</span> <span class="o">=</span> <span class="n">components</span></div>
 
-<div class="viewcode-block" id="EnvBase.check_if_comp_var"><a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.check_if_comp_var">[docs]</a>    <span class="k">def</span> <span class="nf">check_if_comp_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vid</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EnvBase.check_if_comp_var">
+<a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.check_if_comp_var">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_if_comp_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vid</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">comp</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">node</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_children</span><span class="p">(</span><span class="s2">&quot;entry&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">vid</span><span class="p">})</span>
@@ -239,8 +258,11 @@
 
         <span class="k">return</span> <span class="n">vid</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="EnvBase.get_value"><a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.get_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vid</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resolved</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">subgroup</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnvBase.get_value">
+<a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.get_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vid</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resolved</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">subgroup</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a value for entry with id attribute vid.</span>
 <span class="sd">        or from the values field if the attribute argument is provided</span>
 <span class="sd">        and matches</span>
@@ -276,8 +298,11 @@
             <span class="bp">self</span><span class="p">,</span> <span class="n">vid</span><span class="p">,</span> <span class="n">attribute</span><span class="o">=</span><span class="n">attribute</span><span class="p">,</span> <span class="n">resolved</span><span class="o">=</span><span class="n">resolved</span><span class="p">,</span> <span class="n">subgroup</span><span class="o">=</span><span class="n">subgroup</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EnvBase.set_value"><a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.set_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vid</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">subgroup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_type</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnvBase.set_value">
+<a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.set_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vid</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">subgroup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_type</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the value of an entry-id field to value</span>
 <span class="sd">        Returns the value or None if not found</span>
 <span class="sd">        subgroup is ignored in the general routine and applied in specific methods</span>
@@ -303,6 +328,7 @@
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">val</span></div>
 
+
     <span class="c1"># pylint: disable=arguments-differ</span>
     <span class="k">def</span> <span class="nf">_set_value</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">vid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subgroup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_type</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">compclass</span><span class="o">=</span><span class="kc">None</span>
@@ -322,12 +348,17 @@
             <span class="n">val</span> <span class="o">=</span> <span class="n">EntryID</span><span class="o">.</span><span class="n">_set_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">vid</span><span class="p">,</span> <span class="n">subgroup</span><span class="p">,</span> <span class="n">ignore_type</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">val</span>
 
-<div class="viewcode-block" id="EnvBase.get_nodes_by_id"><a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.get_nodes_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varid</span><span class="p">):</span>
+<div class="viewcode-block" id="EnvBase.get_nodes_by_id">
+<a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.get_nodes_by_id">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_nodes_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varid</span><span class="p">):</span>
         <span class="n">varid</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_if_comp_var</span><span class="p">(</span><span class="n">varid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">EntryID</span><span class="o">.</span><span class="n">get_nodes_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varid</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EnvBase.cleanupnode"><a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.cleanupnode">[docs]</a>    <span class="k">def</span> <span class="nf">cleanupnode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnvBase.cleanupnode">
+<a class="viewcode-back" href="../../../CIME_api/CIME.XML.html#CIME.XML.env_base.EnvBase.cleanupnode">[docs]</a>
+    <span class="k">def</span> <span class="nf">cleanupnode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove the &lt;group&gt;, &lt;file&gt;, &lt;values&gt; and &lt;value&gt; childnodes from node</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fnode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_child</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">node</span><span class="p">)</span>
@@ -359,7 +390,9 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">compclassatt</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">remove_child</span><span class="p">(</span><span class="n">vnode</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">node</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">node</span></div></div>
+        <span class="k">return</span> <span class="n">node</span></div>
+</div>
+
 </pre></div>
 
            </div>

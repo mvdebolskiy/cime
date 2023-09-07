@@ -11,12 +11,11 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=30d551ce"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../_static/pop_ver.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -28,14 +27,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> CIME
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CIME
           </a>
               <div class="version">
                 master
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -69,9 +72,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>CIME.utils</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">CIME.utils</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -91,6 +94,7 @@
 <span class="kn">import</span> <span class="nn">importlib.util</span>
 <span class="kn">import</span> <span class="nn">errno</span><span class="o">,</span> <span class="nn">signal</span><span class="o">,</span> <span class="nn">warnings</span><span class="o">,</span> <span class="nn">filecmp</span>
 <span class="kn">import</span> <span class="nn">stat</span> <span class="k">as</span> <span class="nn">statlib</span>
+<span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">Action</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
 
 <span class="kn">from</span> <span class="nn">distutils</span> <span class="kn">import</span> <span class="n">file_util</span>
@@ -104,7 +108,20 @@
 <span class="n">GLOBAL</span> <span class="o">=</span> <span class="p">{}</span>
 
 
-<div class="viewcode-block" id="import_from_file"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.import_from_file">[docs]</a><span class="k">def</span> <span class="nf">import_from_file</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<div class="viewcode-block" id="deprecate_action">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.deprecate_action">[docs]</a>
+<span class="k">def</span> <span class="nf">deprecate_action</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">ActionStoreDeprecated</span><span class="p">(</span><span class="n">Action</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">option_string</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">option_string</span><span class="si">}</span><span class="s2"> is deprecated</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ActionStoreDeprecated</span></div>
+
+
+
+<div class="viewcode-block" id="import_from_file">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.import_from_file">[docs]</a>
+<span class="k">def</span> <span class="nf">import_from_file</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
     <span class="n">loader</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">machinery</span><span class="o">.</span><span class="n">SourceFileLoader</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
 
     <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_loader</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">loader</span><span class="p">)</span>
@@ -118,7 +135,10 @@
     <span class="k">return</span> <span class="n">module</span></div>
 
 
-<div class="viewcode-block" id="redirect_stdout"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.redirect_stdout">[docs]</a><span class="nd">@contextmanager</span>
+
+<div class="viewcode-block" id="redirect_stdout">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.redirect_stdout">[docs]</a>
+<span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">redirect_stdout</span><span class="p">(</span><span class="n">new_target</span><span class="p">):</span>
     <span class="n">old_target</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">new_target</span>  <span class="c1"># replace sys.stdout</span>
     <span class="k">try</span><span class="p">:</span>
@@ -127,7 +147,10 @@
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">old_target</span>  <span class="c1"># restore to the previous value</span></div>
 
 
-<div class="viewcode-block" id="redirect_stderr"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.redirect_stderr">[docs]</a><span class="nd">@contextmanager</span>
+
+<div class="viewcode-block" id="redirect_stderr">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.redirect_stderr">[docs]</a>
+<span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">redirect_stderr</span><span class="p">(</span><span class="n">new_target</span><span class="p">):</span>
     <span class="n">old_target</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">new_target</span>  <span class="c1"># replace sys.stdout</span>
     <span class="k">try</span><span class="p">:</span>
@@ -136,7 +159,10 @@
         <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">old_target</span>  <span class="c1"># restore to the previous value</span></div>
 
 
-<div class="viewcode-block" id="redirect_stdout_stderr"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.redirect_stdout_stderr">[docs]</a><span class="nd">@contextmanager</span>
+
+<div class="viewcode-block" id="redirect_stdout_stderr">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.redirect_stdout_stderr">[docs]</a>
+<span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">redirect_stdout_stderr</span><span class="p">(</span><span class="n">new_target</span><span class="p">):</span>
     <span class="n">old_stdout</span><span class="p">,</span> <span class="n">old_stderr</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">new_target</span><span class="p">,</span> <span class="n">new_target</span>
@@ -146,7 +172,10 @@
         <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">old_stdout</span><span class="p">,</span> <span class="n">old_stderr</span></div>
 
 
-<div class="viewcode-block" id="redirect_logger"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.redirect_logger">[docs]</a><span class="nd">@contextmanager</span>
+
+<div class="viewcode-block" id="redirect_logger">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.redirect_logger">[docs]</a>
+<span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">redirect_logger</span><span class="p">(</span><span class="n">new_target</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">):</span>
     <span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="n">new_target</span><span class="p">)</span>
     <span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
@@ -164,18 +193,27 @@
         <span class="n">log</span><span class="o">.</span><span class="n">handlers</span> <span class="o">=</span> <span class="n">orig_handlers</span></div>
 
 
-<div class="viewcode-block" id="IndentFormatter"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.IndentFormatter">[docs]</a><span class="k">class</span> <span class="nc">IndentFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
+
+<div class="viewcode-block" id="IndentFormatter">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.IndentFormatter">[docs]</a>
+<span class="k">class</span> <span class="nc">IndentFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">datefmt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_indent</span> <span class="o">=</span> <span class="n">indent</span>
 
-<div class="viewcode-block" id="IndentFormatter.format"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.IndentFormatter.format">[docs]</a>    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+<div class="viewcode-block" id="IndentFormatter.format">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.IndentFormatter.format">[docs]</a>
+    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
         <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_indent</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">out</span></div></div>
+        <span class="k">return</span> <span class="n">out</span></div>
+</div>
 
 
-<div class="viewcode-block" id="set_logger_indent"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.set_logger_indent">[docs]</a><span class="k">def</span> <span class="nf">set_logger_indent</span><span class="p">(</span><span class="n">indent</span><span class="p">):</span>
+
+<div class="viewcode-block" id="set_logger_indent">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.set_logger_indent">[docs]</a>
+<span class="k">def</span> <span class="nf">set_logger_indent</span><span class="p">(</span><span class="n">indent</span><span class="p">):</span>
     <span class="n">root_log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
     <span class="n">root_log</span><span class="o">.</span><span class="n">handlers</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">formatter</span> <span class="o">=</span> <span class="n">IndentFormatter</span><span class="p">(</span><span class="n">indent</span><span class="p">)</span>
@@ -185,8 +223,11 @@
     <span class="n">root_log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="EnvironmentContext"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.EnvironmentContext">[docs]</a><span class="k">class</span> <span class="nc">EnvironmentContext</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnvironmentContext">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.EnvironmentContext">[docs]</a>
+<span class="k">class</span> <span class="nc">EnvironmentContext</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Context manager for environment variables</span>
 <span class="sd">    Usage:</span>
 <span class="sd">        os.environ[&#39;MYVAR&#39;] = &#39;oldvalue&#39;</span>
@@ -217,17 +258,23 @@
                 <span class="k">del</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
 
 
+
 <span class="c1"># This should be the go-to exception for CIME use. It&#39;s a subclass</span>
 <span class="c1"># of SystemExit in order suppress tracebacks, which users generally</span>
 <span class="c1"># hate seeing. It&#39;s a subclass of Exception because we want it to be</span>
 <span class="c1"># &quot;catchable&quot;. If you are debugging CIME and want to see the stacktrace,</span>
 <span class="c1"># run your CIME command with the --debug flag.</span>
-<div class="viewcode-block" id="CIMEError"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.CIMEError">[docs]</a><span class="k">class</span> <span class="nc">CIMEError</span><span class="p">(</span><span class="ne">SystemExit</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="CIMEError">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.CIMEError">[docs]</a>
+<span class="k">class</span> <span class="nc">CIMEError</span><span class="p">(</span><span class="ne">SystemExit</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
     <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="expect"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.expect">[docs]</a><span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">error_msg</span><span class="p">,</span> <span class="n">exc_type</span><span class="o">=</span><span class="n">CIMEError</span><span class="p">,</span> <span class="n">error_prefix</span><span class="o">=</span><span class="s2">&quot;ERROR:&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="expect">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.expect">[docs]</a>
+<span class="k">def</span> <span class="nf">expect</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">error_msg</span><span class="p">,</span> <span class="n">exc_type</span><span class="o">=</span><span class="n">CIMEError</span><span class="p">,</span> <span class="n">error_prefix</span><span class="o">=</span><span class="s2">&quot;ERROR:&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Similar to assert except doesn&#39;t generate an ugly stacktrace. Useful for</span>
 <span class="sd">    checking user error, not programming error.</span>
 
@@ -249,12 +296,18 @@
         <span class="k">raise</span> <span class="n">exc_type</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="id_generator"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.id_generator">[docs]</a><span class="k">def</span> <span class="nf">id_generator</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">chars</span><span class="o">=</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">):</span>
+
+<div class="viewcode-block" id="id_generator">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.id_generator">[docs]</a>
+<span class="k">def</span> <span class="nf">id_generator</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">chars</span><span class="o">=</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">):</span>
     <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="check_name"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.check_name">[docs]</a><span class="k">def</span> <span class="nf">check_name</span><span class="p">(</span><span class="n">fullname</span><span class="p">,</span> <span class="n">additional_chars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fullpath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="check_name">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.check_name">[docs]</a>
+<span class="k">def</span> <span class="nf">check_name</span><span class="p">(</span><span class="n">fullname</span><span class="p">,</span> <span class="n">additional_chars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fullpath</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    check for unallowed characters in name, this routine only</span>
 <span class="sd">    checks the final name and does not check if path exists or is</span>
 <span class="sd">    writable</span>
@@ -293,9 +346,10 @@
     <span class="k">return</span> <span class="kc">True</span></div>
 
 
+
 <span class="c1"># Should only be called from get_cime_config()</span>
 <span class="k">def</span> <span class="nf">_read_cime_config_file</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    READ the config file in ~/.cime, this file may contain</span>
 <span class="sd">    [main]</span>
 <span class="sd">    CIME_MODEL=e3sm,cesm,ufs</span>
@@ -345,7 +399,7 @@
     <span class="n">cime_config_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;.cime&quot;</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">cime_config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">SafeConfigParser</span><span class="p">()</span>
+    <span class="n">cime_config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">cime_config_file</span><span class="p">):</span>
         <span class="n">cime_config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">cime_config_file</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">cime_config</span><span class="o">.</span><span class="n">sections</span><span class="p">():</span>
@@ -381,7 +435,9 @@
 <span class="n">_CIMECONFIG</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="get_cime_config"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_cime_config">[docs]</a><span class="k">def</span> <span class="nf">get_cime_config</span><span class="p">():</span>
+<div class="viewcode-block" id="get_cime_config">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_cime_config">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cime_config</span><span class="p">():</span>
     <span class="k">global</span> <span class="n">_CIMECONFIG</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_CIMECONFIG</span><span class="p">:</span>
         <span class="n">_CIMECONFIG</span> <span class="o">=</span> <span class="n">_read_cime_config_file</span><span class="p">()</span>
@@ -389,16 +445,22 @@
     <span class="k">return</span> <span class="n">_CIMECONFIG</span></div>
 
 
-<div class="viewcode-block" id="reset_cime_config"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.reset_cime_config">[docs]</a><span class="k">def</span> <span class="nf">reset_cime_config</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="reset_cime_config">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.reset_cime_config">[docs]</a>
+<span class="k">def</span> <span class="nf">reset_cime_config</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Useful to keep unit tests from interfering with each other</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_CIMECONFIG</span>
     <span class="n">_CIMECONFIG</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="copy_local_macros_to_dir"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.copy_local_macros_to_dir">[docs]</a><span class="k">def</span> <span class="nf">copy_local_macros_to_dir</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="n">extra_machdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="copy_local_macros_to_dir">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.copy_local_macros_to_dir">[docs]</a>
+<span class="k">def</span> <span class="nf">copy_local_macros_to_dir</span><span class="p">(</span><span class="n">destination</span><span class="p">,</span> <span class="n">extra_machdir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copy any local macros files to the path given by &#39;destination&#39;.</span>
 
 <span class="sd">    Local macros files are potentially found in:</span>
@@ -423,15 +485,21 @@
         <span class="n">safe_copy</span><span class="p">(</span><span class="n">macro</span><span class="p">,</span> <span class="n">destination</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_python_libs_location_within_cime"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_python_libs_location_within_cime">[docs]</a><span class="k">def</span> <span class="nf">get_python_libs_location_within_cime</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_python_libs_location_within_cime">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_python_libs_location_within_cime">[docs]</a>
+<span class="k">def</span> <span class="nf">get_python_libs_location_within_cime</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    From within CIME, return subdirectory of python libraries</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;scripts&quot;</span><span class="p">,</span> <span class="s2">&quot;lib&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_cime_root"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_cime_root">[docs]</a><span class="k">def</span> <span class="nf">get_cime_root</span><span class="p">(</span><span class="n">case</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_cime_root">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_cime_root">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cime_root</span><span class="p">(</span><span class="n">case</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the absolute path to the root of CIME that contains this script</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">real_file_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
@@ -451,32 +519,47 @@
     <span class="k">return</span> <span class="n">cimeroot</span></div>
 
 
-<div class="viewcode-block" id="get_config_path"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_config_path">[docs]</a><span class="k">def</span> <span class="nf">get_config_path</span><span class="p">():</span>
+
+<div class="viewcode-block" id="get_config_path">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_config_path">[docs]</a>
+<span class="k">def</span> <span class="nf">get_config_path</span><span class="p">():</span>
     <span class="n">cimeroot</span> <span class="o">=</span> <span class="n">get_cime_root</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cimeroot</span><span class="p">,</span> <span class="s2">&quot;CIME&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_schema_path"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_schema_path">[docs]</a><span class="k">def</span> <span class="nf">get_schema_path</span><span class="p">():</span>
+
+<div class="viewcode-block" id="get_schema_path">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_schema_path">[docs]</a>
+<span class="k">def</span> <span class="nf">get_schema_path</span><span class="p">():</span>
     <span class="n">config_path</span> <span class="o">=</span> <span class="n">get_config_path</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="s2">&quot;xml_schemas&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_template_path"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_template_path">[docs]</a><span class="k">def</span> <span class="nf">get_template_path</span><span class="p">():</span>
+
+<div class="viewcode-block" id="get_template_path">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_template_path">[docs]</a>
+<span class="k">def</span> <span class="nf">get_template_path</span><span class="p">():</span>
     <span class="n">cimeroot</span> <span class="o">=</span> <span class="n">get_cime_root</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cimeroot</span><span class="p">,</span> <span class="s2">&quot;CIME&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;templates&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_tools_path"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_tools_path">[docs]</a><span class="k">def</span> <span class="nf">get_tools_path</span><span class="p">():</span>
+
+<div class="viewcode-block" id="get_tools_path">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_tools_path">[docs]</a>
+<span class="k">def</span> <span class="nf">get_tools_path</span><span class="p">():</span>
     <span class="n">cimeroot</span> <span class="o">=</span> <span class="n">get_cime_root</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cimeroot</span><span class="p">,</span> <span class="s2">&quot;CIME&quot;</span><span class="p">,</span> <span class="s2">&quot;Tools&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_src_root"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_src_root">[docs]</a><span class="k">def</span> <span class="nf">get_src_root</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_src_root">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_src_root">[docs]</a>
+<span class="k">def</span> <span class="nf">get_src_root</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the absolute path to the root of SRCROOT.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -509,7 +592,10 @@
     <span class="k">return</span> <span class="n">srcroot</span></div>
 
 
-<div class="viewcode-block" id="get_cime_default_driver"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_cime_default_driver">[docs]</a><span class="k">def</span> <span class="nf">get_cime_default_driver</span><span class="p">():</span>
+
+<div class="viewcode-block" id="get_cime_default_driver">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_cime_default_driver">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cime_default_driver</span><span class="p">():</span>
     <span class="n">driver</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CIME_DRIVER&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">driver</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting CIME_DRIVER=</span><span class="si">{}</span><span class="s2"> from environment&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">driver</span><span class="p">))</span>
@@ -536,7 +622,10 @@
     <span class="k">return</span> <span class="n">driver</span></div>
 
 
-<div class="viewcode-block" id="get_all_cime_models"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_all_cime_models">[docs]</a><span class="k">def</span> <span class="nf">get_all_cime_models</span><span class="p">():</span>
+
+<div class="viewcode-block" id="get_all_cime_models">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_all_cime_models">[docs]</a>
+<span class="k">def</span> <span class="nf">get_all_cime_models</span><span class="p">():</span>
     <span class="n">config_path</span> <span class="o">=</span> <span class="n">get_config_path</span><span class="p">()</span>
     <span class="n">models</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -549,8 +638,11 @@
     <span class="k">return</span> <span class="n">models</span></div>
 
 
-<div class="viewcode-block" id="set_model"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.set_model">[docs]</a><span class="k">def</span> <span class="nf">set_model</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="set_model">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.set_model">[docs]</a>
+<span class="k">def</span> <span class="nf">set_model</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Set the model to be used in this session</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cime_config</span> <span class="o">=</span> <span class="n">get_cime_config</span><span class="p">()</span>
@@ -566,8 +658,11 @@
     <span class="n">cime_config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;CIME_MODEL&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_model"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_model">[docs]</a><span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_model">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_model">[docs]</a>
+<span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the currently configured model value</span>
 <span class="sd">    The CIME_MODEL env variable may or may not be set</span>
 
@@ -635,6 +730,7 @@
     <span class="n">expect</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">_get_path</span><span class="p">(</span><span class="n">filearg</span><span class="p">,</span> <span class="n">from_dir</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">filearg</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">from_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">filearg</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">from_dir</span><span class="p">,</span> <span class="n">filearg</span><span class="p">)</span>
@@ -652,7 +748,7 @@
 
 
 <span class="k">def</span> <span class="nf">_line_defines_python_function</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">funcname</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns True if the given line defines the function &#39;funcname&#39; as a top-level definition</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if the given line defines the function &#39;funcname&#39; as a top-level definition</span>
 
 <span class="sd">    (&quot;top-level definition&quot; means: not something like a class method; i.e., the def should</span>
 <span class="sd">    be at the start of the line, not indented)</span>
@@ -665,8 +761,10 @@
     <span class="k">return</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="file_contains_python_function"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.file_contains_python_function">[docs]</a><span class="k">def</span> <span class="nf">file_contains_python_function</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">funcname</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Checks whether the given file contains a top-level definition of the function &#39;funcname&#39;</span>
+<div class="viewcode-block" id="file_contains_python_function">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.file_contains_python_function">[docs]</a>
+<span class="k">def</span> <span class="nf">file_contains_python_function</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">funcname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks whether the given file contains a top-level definition of the function &#39;funcname&#39;</span>
 
 <span class="sd">    Returns a boolean value (True if the file contains this function definition, False otherwise)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -680,7 +778,10 @@
     <span class="k">return</span> <span class="n">has_function</span></div>
 
 
-<div class="viewcode-block" id="fixup_sys_path"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.fixup_sys_path">[docs]</a><span class="k">def</span> <span class="nf">fixup_sys_path</span><span class="p">(</span><span class="o">*</span><span class="n">additional_paths</span><span class="p">):</span>
+
+<div class="viewcode-block" id="fixup_sys_path">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.fixup_sys_path">[docs]</a>
+<span class="k">def</span> <span class="nf">fixup_sys_path</span><span class="p">(</span><span class="o">*</span><span class="n">additional_paths</span><span class="p">):</span>
     <span class="n">cimeroot</span> <span class="o">=</span> <span class="n">get_cime_root</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">cimeroot</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">cimeroot</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -696,7 +797,10 @@
             <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="import_and_run_sub_or_cmd"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.import_and_run_sub_or_cmd">[docs]</a><span class="k">def</span> <span class="nf">import_and_run_sub_or_cmd</span><span class="p">(</span>
+
+<div class="viewcode-block" id="import_and_run_sub_or_cmd">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.import_and_run_sub_or_cmd">[docs]</a>
+<span class="k">def</span> <span class="nf">import_and_run_sub_or_cmd</span><span class="p">(</span>
     <span class="n">cmd</span><span class="p">,</span>
     <span class="n">cmdargs</span><span class="p">,</span>
     <span class="n">subname</span><span class="p">,</span>
@@ -716,7 +820,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">compname</span><span class="si">}</span><span class="s2">_cime_py&quot;</span><span class="p">)</span>
         <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">subname</span><span class="p">)(</span><span class="o">*</span><span class="n">subargs</span><span class="p">)</span>
-    <span class="k">except</span> <span class="p">(</span><span class="ne">ModuleNotFoundError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ModuleNotFoundError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="c1"># * ModuleNotFoundError if importlib can not find module,</span>
         <span class="c1"># * AttributeError if importlib finds the module but</span>
         <span class="c1">#   {subname} is not defined in the module</span>
@@ -724,7 +828,19 @@
             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">cmd</span><span class="p">),</span>
             <span class="sa">f</span><span class="s2">&quot;Could not find </span><span class="si">{</span><span class="n">subname</span><span class="si">}</span><span class="s2"> file for component </span><span class="si">{</span><span class="n">compname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">run_sub_or_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">cmdargs</span><span class="p">,</span> <span class="n">subname</span><span class="p">,</span> <span class="n">subargs</span><span class="p">,</span> <span class="n">logfile</span><span class="p">,</span> <span class="n">case</span><span class="p">,</span> <span class="n">from_dir</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+
+        <span class="c1"># TODO shouldn&#39;t need to use logger.isEnabledFor for debug logging</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">)</span> <span class="ow">and</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;WARNING: Could not import module &#39;</span><span class="si">{}</span><span class="s2">_cime_py&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">compname</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">run_sub_or_cmd</span><span class="p">(</span>
+                <span class="n">cmd</span><span class="p">,</span> <span class="n">cmdargs</span><span class="p">,</span> <span class="n">subname</span><span class="p">,</span> <span class="n">subargs</span><span class="p">,</span> <span class="n">logfile</span><span class="p">,</span> <span class="n">case</span><span class="p">,</span> <span class="n">from_dir</span><span class="p">,</span> <span class="n">timeout</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e1</span> <span class="kn">from</span> <span class="kc">None</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">logfile</span><span class="p">:</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">log_fd</span><span class="p">:</span>
@@ -735,10 +851,13 @@
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">sys_path_old</span></div>
 
 
-<div class="viewcode-block" id="run_sub_or_cmd"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.run_sub_or_cmd">[docs]</a><span class="k">def</span> <span class="nf">run_sub_or_cmd</span><span class="p">(</span>
+
+<div class="viewcode-block" id="run_sub_or_cmd">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.run_sub_or_cmd">[docs]</a>
+<span class="k">def</span> <span class="nf">run_sub_or_cmd</span><span class="p">(</span>
     <span class="n">cmd</span><span class="p">,</span> <span class="n">cmdargs</span><span class="p">,</span> <span class="n">subname</span><span class="p">,</span> <span class="n">subargs</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">from_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This code will try to import and run each cmd as a subroutine</span>
 <span class="sd">    if that fails it will run it as a program in a seperate shell</span>
 
@@ -813,7 +932,10 @@
         <span class="k">case</span><span class="o">.</span><span class="n">read_xml</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="run_cmd"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.run_cmd">[docs]</a><span class="k">def</span> <span class="nf">run_cmd</span><span class="p">(</span>
+
+<div class="viewcode-block" id="run_cmd">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.run_cmd">[docs]</a>
+<span class="k">def</span> <span class="nf">run_cmd</span><span class="p">(</span>
     <span class="n">cmd</span><span class="p">,</span>
     <span class="n">input_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">from_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -826,7 +948,7 @@
     <span class="n">executable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper around subprocess to make it much more convenient to run shell commands</span>
 
 <span class="sd">    &gt;&gt;&gt; run_cmd(&#39;ls file_i_hope_doesnt_exist&#39;)[0] != 0</span>
@@ -949,7 +1071,10 @@
     <span class="k">return</span> <span class="n">stat</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">errput</span></div>
 
 
-<div class="viewcode-block" id="run_cmd_no_fail"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.run_cmd_no_fail">[docs]</a><span class="k">def</span> <span class="nf">run_cmd_no_fail</span><span class="p">(</span>
+
+<div class="viewcode-block" id="run_cmd_no_fail">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.run_cmd_no_fail">[docs]</a>
+<span class="k">def</span> <span class="nf">run_cmd_no_fail</span><span class="p">(</span>
     <span class="n">cmd</span><span class="p">,</span>
     <span class="n">input_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">from_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -961,7 +1086,7 @@
     <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">executable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wrapper around subprocess to make it much more convenient to run shell commands.</span>
 <span class="sd">    Expects command to work. Just returns output string.</span>
 
@@ -1014,8 +1139,11 @@
     <span class="k">return</span> <span class="n">output</span></div>
 
 
-<div class="viewcode-block" id="normalize_case_id"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.normalize_case_id">[docs]</a><span class="k">def</span> <span class="nf">normalize_case_id</span><span class="p">(</span><span class="n">case_id</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="normalize_case_id">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.normalize_case_id">[docs]</a>
+<span class="k">def</span> <span class="nf">normalize_case_id</span><span class="p">(</span><span class="n">case_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a case_id, return it in form TESTCASE.GRID.COMPSET.PLATFORM</span>
 
 <span class="sd">    &gt;&gt;&gt; normalize_case_id(&#39;ERT.ne16_g37.B1850C5.sandiatoss3_intel&#39;)</span>
@@ -1040,8 +1168,11 @@
         <span class="k">return</span> <span class="n">case_id</span></div>
 
 
-<div class="viewcode-block" id="parse_test_name"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.parse_test_name">[docs]</a><span class="k">def</span> <span class="nf">parse_test_name</span><span class="p">(</span><span class="n">test_name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="parse_test_name">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.parse_test_name">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_test_name</span><span class="p">(</span><span class="n">test_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a CIME test name TESTCASE[_CASEOPTS].GRID.COMPSET[.MACHINE_COMPILER[.TESTMODS]],</span>
 <span class="sd">    return each component of the testname with machine and compiler split.</span>
 <span class="sd">    Do not error if a partial testname is provided (TESTCASE or TESTCASE.GRID) instead</span>
@@ -1076,6 +1207,12 @@
 <span class="sd">    [&#39;ERS&#39;, None, &#39;fe12_123&#39;, &#39;JGF&#39;, &#39;machine&#39;, &#39;compiler&#39;, None]</span>
 <span class="sd">    &gt;&gt;&gt; parse_test_name(&#39;ERS.fe12_123.JGF.machine_compiler.test-mods&#39;)</span>
 <span class="sd">    [&#39;ERS&#39;, None, &#39;fe12_123&#39;, &#39;JGF&#39;, &#39;machine&#39;, &#39;compiler&#39;, [&#39;test/mods&#39;]]</span>
+<span class="sd">    &gt;&gt;&gt; parse_test_name(&#39;ERS.fe12_123.JGF.*_compiler.test-mods&#39;)</span>
+<span class="sd">    [&#39;ERS&#39;, None, &#39;fe12_123&#39;, &#39;JGF&#39;, None, &#39;compiler&#39;, [&#39;test/mods&#39;]]</span>
+<span class="sd">    &gt;&gt;&gt; parse_test_name(&#39;ERS.fe12_123.JGF.machine_*.test-mods&#39;)</span>
+<span class="sd">    [&#39;ERS&#39;, None, &#39;fe12_123&#39;, &#39;JGF&#39;, &#39;machine&#39;, None, [&#39;test/mods&#39;]]</span>
+<span class="sd">    &gt;&gt;&gt; parse_test_name(&#39;ERS.fe12_123.JGF.*_*.test-mods&#39;)</span>
+<span class="sd">    [&#39;ERS&#39;, None, &#39;fe12_123&#39;, &#39;JGF&#39;, None, None, [&#39;test/mods&#39;]]</span>
 <span class="sd">    &gt;&gt;&gt; parse_test_name(&#39;ERS.fe12_123.JGF.machine_compiler.test-mods--other-dir-path--and-one-more&#39;)</span>
 <span class="sd">    [&#39;ERS&#39;, None, &#39;fe12_123&#39;, &#39;JGF&#39;, &#39;machine&#39;, &#39;compiler&#39;, [&#39;test/mods&#39;, &#39;other/dir/path&#39;, &#39;and/one/more&#39;]]</span>
 <span class="sd">    &gt;&gt;&gt; parse_test_name(&#39;SMS.f19_g16.2000_DATM%QI.A_XLND_SICE_SOCN_XROF_XGLC_SWAV.mach-ine_compiler.test-mods&#39;) # doctest: +IGNORE_EXCEPTION_DETAIL</span>
@@ -1109,6 +1246,10 @@
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">rv</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">rv</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rv</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+            <span class="n">rv</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">rv</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+            <span class="n">rv</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">rv</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">rv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1127,7 +1268,10 @@
     <span class="k">return</span> <span class="n">rv</span></div>
 
 
-<div class="viewcode-block" id="get_full_test_name"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_full_test_name">[docs]</a><span class="k">def</span> <span class="nf">get_full_test_name</span><span class="p">(</span>
+
+<div class="viewcode-block" id="get_full_test_name">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_full_test_name">[docs]</a>
+<span class="k">def</span> <span class="nf">get_full_test_name</span><span class="p">(</span>
     <span class="n">partial_test</span><span class="p">,</span>
     <span class="n">caseopts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1137,7 +1281,7 @@
     <span class="n">testmods_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">testmods_string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a partial CIME test name, return in form TESTCASE.GRID.COMPSET.MACHINE_COMPILER[.TESTMODS]</span>
 <span class="sd">    Use the additional args to fill out the name if needed</span>
 
@@ -1201,7 +1345,6 @@
     <span class="p">]</span>
 
     <span class="n">result</span> <span class="o">=</span> <span class="n">partial_test</span>
-
     <span class="k">for</span> <span class="n">partial_val</span><span class="p">,</span> <span class="n">arg_val</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">partial_val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Add to result based on args</span>
@@ -1211,9 +1354,14 @@
                     <span class="n">partial_test</span><span class="p">,</span> <span class="n">name</span>
                 <span class="p">),</span>
             <span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">result</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;compiler&quot;</span> <span class="k">else</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">arg_val</span>
-            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;machine&quot;</span> <span class="ow">and</span> <span class="s2">&quot;*_&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;*_&quot;</span><span class="p">,</span> <span class="n">arg_val</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;compiler&quot;</span> <span class="ow">and</span> <span class="s2">&quot;_*&quot;</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_*&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">arg_val</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">result</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;compiler&quot;</span> <span class="k">else</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">arg_val</span>
+                <span class="p">)</span>
         <span class="k">elif</span> <span class="n">arg_val</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">partial_val</span> <span class="o">!=</span> <span class="n">partial_compiler</span><span class="p">:</span>
             <span class="n">expect</span><span class="p">(</span>
                 <span class="n">arg_val</span> <span class="o">==</span> <span class="n">partial_val</span><span class="p">,</span>
@@ -1268,8 +1416,11 @@
     <span class="k">return</span> <span class="n">result</span></div>
 
 
-<div class="viewcode-block" id="get_current_branch"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_current_branch">[docs]</a><span class="k">def</span> <span class="nf">get_current_branch</span><span class="p">(</span><span class="n">repo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_current_branch">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_current_branch">[docs]</a>
+<span class="k">def</span> <span class="nf">get_current_branch</span><span class="p">(</span><span class="n">repo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the name of the current branch for a repository</span>
 
 <span class="sd">    &gt;&gt;&gt; if &quot;GIT_BRANCH&quot; in os.environ:</span>
@@ -1295,8 +1446,11 @@
             <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;refs/heads/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_current_commit"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_current_commit">[docs]</a><span class="k">def</span> <span class="nf">get_current_commit</span><span class="p">(</span><span class="n">short</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">repo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_current_commit">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_current_commit">[docs]</a>
+<span class="k">def</span> <span class="nf">get_current_commit</span><span class="p">(</span><span class="n">short</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">repo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the sha1 of the current HEAD commit</span>
 
 <span class="sd">    &gt;&gt;&gt; get_current_commit() is not None</span>
@@ -1314,13 +1468,19 @@
     <span class="k">return</span> <span class="n">output</span> <span class="k">if</span> <span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span></div>
 
 
-<div class="viewcode-block" id="get_model_config_location_within_cime"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_model_config_location_within_cime">[docs]</a><span class="k">def</span> <span class="nf">get_model_config_location_within_cime</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_model_config_location_within_cime">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_model_config_location_within_cime">[docs]</a>
+<span class="k">def</span> <span class="nf">get_model_config_location_within_cime</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">get_model</span><span class="p">()</span> <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">model</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_scripts_root"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_scripts_root">[docs]</a><span class="k">def</span> <span class="nf">get_scripts_root</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_scripts_root">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_scripts_root">[docs]</a>
+<span class="k">def</span> <span class="nf">get_scripts_root</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get absolute path to scripts</span>
 
 <span class="sd">    &gt;&gt;&gt; os.path.isdir(get_scripts_root())</span>
@@ -1329,8 +1489,11 @@
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_cime_root</span><span class="p">(),</span> <span class="s2">&quot;scripts&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_model_config_root"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_model_config_root">[docs]</a><span class="k">def</span> <span class="nf">get_model_config_root</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_model_config_root">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_model_config_root">[docs]</a>
+<span class="k">def</span> <span class="nf">get_model_config_root</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get absolute path to model config area&quot;</span>
 
 <span class="sd">    &gt;&gt;&gt; os.environ[&quot;CIME_MODEL&quot;] = &quot;e3sm&quot; # Set the test up don&#39;t depend on external resources</span>
@@ -1343,15 +1506,21 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="stop_buffering_output"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.stop_buffering_output">[docs]</a><span class="k">def</span> <span class="nf">stop_buffering_output</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="stop_buffering_output">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.stop_buffering_output">[docs]</a>
+<span class="k">def</span> <span class="nf">stop_buffering_output</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    All stdout, stderr will not be buffered after this is called.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYTHONUNBUFFERED&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span></div>
 
 
-<div class="viewcode-block" id="start_buffering_output"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.start_buffering_output">[docs]</a><span class="k">def</span> <span class="nf">start_buffering_output</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="start_buffering_output">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.start_buffering_output">[docs]</a>
+<span class="k">def</span> <span class="nf">start_buffering_output</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    All stdout, stderr will be buffered after this is called. This is python&#39;s</span>
 <span class="sd">    default behavior.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1359,20 +1528,28 @@
     <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fdopen</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="match_any"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.match_any">[docs]</a><span class="k">def</span> <span class="nf">match_any</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">re_list</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Return true if item matches any regex in re_list</span>
+
+<div class="viewcode-block" id="match_any">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.match_any">[docs]</a>
+<span class="k">def</span> <span class="nf">match_any</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">re_counts</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return true if item matches any regex in re_counts&#39; keys. Increments</span>
+<span class="sd">    count if a match was found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">regex_str</span> <span class="ow">in</span> <span class="n">re_list</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">regex_str</span> <span class="ow">in</span> <span class="n">re_counts</span><span class="p">:</span>
         <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex_str</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+            <span class="n">re_counts</span><span class="p">[</span><span class="n">regex_str</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="get_current_submodule_status"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_current_submodule_status">[docs]</a><span class="k">def</span> <span class="nf">get_current_submodule_status</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">repo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_current_submodule_status">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_current_submodule_status">[docs]</a>
+<span class="k">def</span> <span class="nf">get_current_submodule_status</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">repo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the sha1s of the current currently checked out commit for each submodule,</span>
 <span class="sd">    along with the submodule path and the output of git describe for the SHA-1.</span>
 
@@ -1387,8 +1564,11 @@
     <span class="k">return</span> <span class="n">output</span> <span class="k">if</span> <span class="n">rc</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;unknown&quot;</span></div>
 
 
-<div class="viewcode-block" id="copy_globs"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.copy_globs">[docs]</a><span class="k">def</span> <span class="nf">copy_globs</span><span class="p">(</span><span class="n">globs_to_copy</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">lid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="copy_globs">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.copy_globs">[docs]</a>
+<span class="k">def</span> <span class="nf">copy_globs</span><span class="p">(</span><span class="n">globs_to_copy</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">lid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes a list of globs and copies all files to `output_directory`.</span>
 
 <span class="sd">    Hiddens files become unhidden i.e. removing starting dot.</span>
@@ -1411,8 +1591,11 @@
             <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="safe_copy"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.safe_copy">[docs]</a><span class="k">def</span> <span class="nf">safe_copy</span><span class="p">(</span><span class="n">src_path</span><span class="p">,</span> <span class="n">tgt_path</span><span class="p">,</span> <span class="n">preserve_meta</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="safe_copy">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.safe_copy">[docs]</a>
+<span class="k">def</span> <span class="nf">safe_copy</span><span class="p">(</span><span class="n">src_path</span><span class="p">,</span> <span class="n">tgt_path</span><span class="p">,</span> <span class="n">preserve_meta</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A flexbile and safe copy routine. Will try to copy file and metadata, but this</span>
 <span class="sd">    can fail if the current user doesn&#39;t own the tgt file. A fallback data-only copy is</span>
 <span class="sd">    attempted in this case. Works even if overwriting a read-only file.</span>
@@ -1482,8 +1665,11 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="safe_recursive_copy"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.safe_recursive_copy">[docs]</a><span class="k">def</span> <span class="nf">safe_recursive_copy</span><span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="n">tgt_dir</span><span class="p">,</span> <span class="n">file_map</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="safe_recursive_copy">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.safe_recursive_copy">[docs]</a>
+<span class="k">def</span> <span class="nf">safe_recursive_copy</span><span class="p">(</span><span class="n">src_dir</span><span class="p">,</span> <span class="n">tgt_dir</span><span class="p">,</span> <span class="n">file_map</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Copies a set of files from one dir to another. Works even if overwriting a</span>
 <span class="sd">    read-only file. Files can be relative paths and the relative path will be</span>
 <span class="sd">    matched on the tgt side.</span>
@@ -1500,8 +1686,11 @@
         <span class="n">safe_copy</span><span class="p">(</span><span class="n">full_src</span><span class="p">,</span> <span class="n">full_tgt</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="symlink_force"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.symlink_force">[docs]</a><span class="k">def</span> <span class="nf">symlink_force</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">link_name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="symlink_force">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.symlink_force">[docs]</a>
+<span class="k">def</span> <span class="nf">symlink_force</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">link_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Makes a symlink from link_name to target. Unlike the standard</span>
 <span class="sd">    os.symlink, this will work even if link_name already exists (in</span>
 <span class="sd">    which case link_name will be overwritten).</span>
@@ -1516,8 +1705,11 @@
             <span class="k">raise</span> <span class="n">e</span></div>
 
 
-<div class="viewcode-block" id="find_proc_id"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.find_proc_id">[docs]</a><span class="k">def</span> <span class="nf">find_proc_id</span><span class="p">(</span><span class="n">proc_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">children_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">of_parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="find_proc_id">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.find_proc_id">[docs]</a>
+<span class="k">def</span> <span class="nf">find_proc_id</span><span class="p">(</span><span class="n">proc_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">children_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">of_parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Children implies recursive.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">expect</span><span class="p">(</span>
@@ -1552,8 +1744,11 @@
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_timestamp"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_timestamp">[docs]</a><span class="k">def</span> <span class="nf">get_timestamp</span><span class="p">(</span><span class="n">timestamp_format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S&quot;</span><span class="p">,</span> <span class="n">utc_time</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_timestamp">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_timestamp">[docs]</a>
+<span class="k">def</span> <span class="nf">get_timestamp</span><span class="p">(</span><span class="n">timestamp_format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S&quot;</span><span class="p">,</span> <span class="n">utc_time</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get a string representing the current UTC time in format: YYYYMMDD_HHMMSS</span>
 
 <span class="sd">    The format can be changed if needed.</span>
@@ -1565,8 +1760,11 @@
     <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">timestamp_format</span><span class="p">,</span> <span class="n">time_tuple</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_project"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_project">[docs]</a><span class="k">def</span> <span class="nf">get_project</span><span class="p">(</span><span class="n">machobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_project">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_project">[docs]</a>
+<span class="k">def</span> <span class="nf">get_project</span><span class="p">(</span><span class="n">machobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Hierarchy for choosing PROJECT:</span>
 <span class="sd">    0. Command line flag to create_newcase or create_test</span>
 <span class="sd">    1. Environment variable PROJECT</span>
@@ -1613,8 +1811,11 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="get_charge_account"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_charge_account">[docs]</a><span class="k">def</span> <span class="nf">get_charge_account</span><span class="p">(</span><span class="n">machobj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_charge_account">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_charge_account">[docs]</a>
+<span class="k">def</span> <span class="nf">get_charge_account</span><span class="p">(</span><span class="n">machobj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Hierarchy for choosing CHARGE_ACCOUNT:</span>
 <span class="sd">    1. Environment variable CHARGE_ACCOUNT</span>
 <span class="sd">    2. File $HOME/.cime/config</span>
@@ -1657,8 +1858,11 @@
     <span class="k">return</span> <span class="n">project</span></div>
 
 
-<div class="viewcode-block" id="find_files"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.find_files">[docs]</a><span class="k">def</span> <span class="nf">find_files</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="find_files">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.find_files">[docs]</a>
+<span class="k">def</span> <span class="nf">find_files</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    recursively find all files matching a pattern</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1670,7 +1874,10 @@
     <span class="k">return</span> <span class="n">result</span></div>
 
 
-<div class="viewcode-block" id="setup_standard_logging_options"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.setup_standard_logging_options">[docs]</a><span class="k">def</span> <span class="nf">setup_standard_logging_options</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+
+<div class="viewcode-block" id="setup_standard_logging_options">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.setup_standard_logging_options">[docs]</a>
+<span class="k">def</span> <span class="nf">setup_standard_logging_options</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
     <span class="n">helpfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.log&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;-d&quot;</span><span class="p">,</span>
@@ -1692,6 +1899,7 @@
     <span class="p">)</span></div>
 
 
+
 <span class="k">class</span> <span class="nc">_LessThanFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exclusive_maximum</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">_LessThanFilter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -1702,7 +1910,9 @@
         <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">levelno</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_level</span> <span class="k">else</span> <span class="mi">0</span>
 
 
-<div class="viewcode-block" id="configure_logging"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.configure_logging">[docs]</a><span class="k">def</span> <span class="nf">configure_logging</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">silent</span><span class="p">):</span>
+<div class="viewcode-block" id="configure_logging">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.configure_logging">[docs]</a>
+<span class="k">def</span> <span class="nf">configure_logging</span><span class="p">(</span><span class="n">verbose</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">silent</span><span class="p">):</span>
     <span class="n">root_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
 
     <span class="n">verbose_formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
@@ -1742,8 +1952,11 @@
         <span class="n">root_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="parse_args_and_handle_standard_logging_options"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.parse_args_and_handle_standard_logging_options">[docs]</a><span class="k">def</span> <span class="nf">parse_args_and_handle_standard_logging_options</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">parser</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="parse_args_and_handle_standard_logging_options">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.parse_args_and_handle_standard_logging_options">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_args_and_handle_standard_logging_options</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">parser</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Guide to logging in CIME.</span>
 
 <span class="sd">    logger.debug -&gt; Verbose/detailed output, use for debugging, off by default. Goes to a .log file</span>
@@ -1762,8 +1975,11 @@
     <span class="k">return</span> <span class="n">args</span></div>
 
 
-<div class="viewcode-block" id="get_logging_options"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_logging_options">[docs]</a><span class="k">def</span> <span class="nf">get_logging_options</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_logging_options">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_logging_options">[docs]</a>
+<span class="k">def</span> <span class="nf">get_logging_options</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Use to pass same logging options as was used for current</span>
 <span class="sd">    executable to subprocesses.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1777,8 +1993,11 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="convert_to_type"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.convert_to_type">[docs]</a><span class="k">def</span> <span class="nf">convert_to_type</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">type_str</span><span class="p">,</span> <span class="n">vid</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="convert_to_type">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.convert_to_type">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_to_type</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">type_str</span><span class="p">,</span> <span class="n">vid</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert value from string to another type.</span>
 <span class="sd">    vid is only for generating better error messages.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1824,8 +2043,11 @@
     <span class="k">return</span> <span class="n">value</span></div>
 
 
-<div class="viewcode-block" id="convert_to_unknown_type"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.convert_to_unknown_type">[docs]</a><span class="k">def</span> <span class="nf">convert_to_unknown_type</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="convert_to_unknown_type">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.convert_to_unknown_type">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_to_unknown_type</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert value to it&#39;s real type by probing conversions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1855,8 +2077,11 @@
     <span class="k">return</span> <span class="n">value</span></div>
 
 
-<div class="viewcode-block" id="convert_to_string"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.convert_to_string">[docs]</a><span class="k">def</span> <span class="nf">convert_to_string</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">type_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vid</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="convert_to_string">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.convert_to_string">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_to_string</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">type_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vid</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert value back to string.</span>
 <span class="sd">    vid is only for generating better error messages.</span>
 <span class="sd">    &gt;&gt;&gt; convert_to_string(6, type_str=&quot;integer&quot;) == &#39;6&#39;</span>
@@ -1895,8 +2120,11 @@
     <span class="k">return</span> <span class="n">value</span></div>
 
 
-<div class="viewcode-block" id="convert_to_seconds"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.convert_to_seconds">[docs]</a><span class="k">def</span> <span class="nf">convert_to_seconds</span><span class="p">(</span><span class="n">time_str</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="convert_to_seconds">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.convert_to_seconds">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_to_seconds</span><span class="p">(</span><span class="n">time_str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert time value in [[HH:]MM:]SS to seconds</span>
 
 <span class="sd">    We assume that XX:YY is likely to be HH:MM, not MM:SS</span>
@@ -1920,8 +2148,11 @@
     <span class="k">return</span> <span class="n">result</span></div>
 
 
-<div class="viewcode-block" id="convert_to_babylonian_time"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.convert_to_babylonian_time">[docs]</a><span class="k">def</span> <span class="nf">convert_to_babylonian_time</span><span class="p">(</span><span class="n">seconds</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="convert_to_babylonian_time">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.convert_to_babylonian_time">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_to_babylonian_time</span><span class="p">(</span><span class="n">seconds</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert time value to seconds to HH:MM:SS</span>
 
 <span class="sd">    &gt;&gt;&gt; convert_to_babylonian_time(3661)</span>
@@ -1937,8 +2168,11 @@
     <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{:02d}</span><span class="s2">:</span><span class="si">{:02d}</span><span class="s2">:</span><span class="si">{:02d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hours</span><span class="p">,</span> <span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_time_in_seconds"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_time_in_seconds">[docs]</a><span class="k">def</span> <span class="nf">get_time_in_seconds</span><span class="p">(</span><span class="n">timeval</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="get_time_in_seconds">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_time_in_seconds">[docs]</a>
+<span class="k">def</span> <span class="nf">get_time_in_seconds</span><span class="p">(</span><span class="n">timeval</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a time from &#39;unit&#39; to seconds</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s2">&quot;nyear&quot;</span> <span class="ow">in</span> <span class="n">unit</span><span class="p">:</span>
@@ -1957,8 +2191,11 @@
     <span class="k">return</span> <span class="n">dmult</span> <span class="o">*</span> <span class="n">timeval</span></div>
 
 
-<div class="viewcode-block" id="compute_total_time"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.compute_total_time">[docs]</a><span class="k">def</span> <span class="nf">compute_total_time</span><span class="p">(</span><span class="n">job_cost_map</span><span class="p">,</span> <span class="n">proc_pool</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="compute_total_time">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.compute_total_time">[docs]</a>
+<span class="k">def</span> <span class="nf">compute_total_time</span><span class="p">(</span><span class="n">job_cost_map</span><span class="p">,</span> <span class="n">proc_pool</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a map: jobname -&gt; (procs, est-time), return a total time</span>
 <span class="sd">    estimate for a given processor pool size</span>
 
@@ -2000,8 +2237,11 @@
     <span class="k">return</span> <span class="n">current_time</span></div>
 
 
-<div class="viewcode-block" id="format_time"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.format_time">[docs]</a><span class="k">def</span> <span class="nf">format_time</span><span class="p">(</span><span class="n">time_format</span><span class="p">,</span> <span class="n">input_format</span><span class="p">,</span> <span class="n">input_time</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="format_time">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.format_time">[docs]</a>
+<span class="k">def</span> <span class="nf">format_time</span><span class="p">(</span><span class="n">time_format</span><span class="p">,</span> <span class="n">input_format</span><span class="p">,</span> <span class="n">input_time</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts the string input_time from input_format to time_format</span>
 <span class="sd">    Valid format specifiers are &quot;%H&quot;, &quot;%M&quot;, and &quot;%S&quot;</span>
 <span class="sd">    % signs must be followed by an H, M, or S and then a separator</span>
@@ -2091,8 +2331,11 @@
     <span class="k">return</span> <span class="n">output_time</span></div>
 
 
-<div class="viewcode-block" id="append_status"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.append_status">[docs]</a><span class="k">def</span> <span class="nf">append_status</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">sfile</span><span class="p">,</span> <span class="n">caseroot</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="append_status">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.append_status">[docs]</a>
+<span class="k">def</span> <span class="nf">append_status</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">sfile</span><span class="p">,</span> <span class="n">caseroot</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Append msg to sfile in caseroot</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ctime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S: &quot;</span><span class="p">)</span>
@@ -2106,15 +2349,21 @@
         <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; ---------------------------------------------------&quot;</span> <span class="o">+</span> <span class="n">line_ending</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="append_testlog"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.append_testlog">[docs]</a><span class="k">def</span> <span class="nf">append_testlog</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">caseroot</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="append_testlog">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.append_testlog">[docs]</a>
+<span class="k">def</span> <span class="nf">append_testlog</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">caseroot</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Add to TestStatus.log file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">append_status</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s2">&quot;TestStatus.log&quot;</span><span class="p">,</span> <span class="n">caseroot</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="append_case_status"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.append_case_status">[docs]</a><span class="k">def</span> <span class="nf">append_case_status</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">caseroot</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="append_case_status">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.append_case_status">[docs]</a>
+<span class="k">def</span> <span class="nf">append_case_status</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">caseroot</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update CaseStatus file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">append_status</span><span class="p">(</span>
@@ -2124,15 +2373,21 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="does_file_have_string"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.does_file_have_string">[docs]</a><span class="k">def</span> <span class="nf">does_file_have_string</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="does_file_have_string">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.does_file_have_string">[docs]</a>
+<span class="k">def</span> <span class="nf">does_file_have_string</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Does the text string appear in the filepath file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span> <span class="ow">and</span> <span class="n">text</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="is_last_process_complete"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.is_last_process_complete">[docs]</a><span class="k">def</span> <span class="nf">is_last_process_complete</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">expect_text</span><span class="p">,</span> <span class="n">fail_text</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="is_last_process_complete">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.is_last_process_complete">[docs]</a>
+<span class="k">def</span> <span class="nf">is_last_process_complete</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">expect_text</span><span class="p">,</span> <span class="n">fail_text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Search the filepath in reverse order looking for expect_text</span>
 <span class="sd">    before finding fail_text. This utility is used by archive_metadata.</span>
 
@@ -2161,8 +2416,11 @@
     <span class="k">return</span> <span class="n">complete</span></div>
 
 
-<div class="viewcode-block" id="transform_vars"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.transform_vars">[docs]</a><span class="k">def</span> <span class="nf">transform_vars</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subgroup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="transform_vars">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.transform_vars">[docs]</a>
+<span class="k">def</span> <span class="nf">transform_vars</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subgroup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Do the variable substitution for any variables that need transforms</span>
 <span class="sd">    recursively.</span>
 
@@ -2237,7 +2495,10 @@
     <span class="k">return</span> <span class="n">text</span></div>
 
 
-<div class="viewcode-block" id="wait_for_unlocked"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.wait_for_unlocked">[docs]</a><span class="k">def</span> <span class="nf">wait_for_unlocked</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+
+<div class="viewcode-block" id="wait_for_unlocked">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.wait_for_unlocked">[docs]</a>
+<span class="k">def</span> <span class="nf">wait_for_unlocked</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
     <span class="n">locked</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">file_object</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">while</span> <span class="n">locked</span><span class="p">:</span>
@@ -2255,13 +2516,19 @@
                 <span class="n">file_object</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="gunzip_existing_file"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.gunzip_existing_file">[docs]</a><span class="k">def</span> <span class="nf">gunzip_existing_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+
+<div class="viewcode-block" id="gunzip_existing_file">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.gunzip_existing_file">[docs]</a>
+<span class="k">def</span> <span class="nf">gunzip_existing_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
     <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="gzip_existing_file"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.gzip_existing_file">[docs]</a><span class="k">def</span> <span class="nf">gzip_existing_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="gzip_existing_file">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.gzip_existing_file">[docs]</a>
+<span class="k">def</span> <span class="nf">gzip_existing_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gzips an existing file, removes the unzipped version, returns path to zip file.</span>
 <span class="sd">    Note the that the timestamp of the original file will be maintained in</span>
 <span class="sd">    the zipped file.</span>
@@ -2292,15 +2559,21 @@
     <span class="k">return</span> <span class="n">gzpath</span></div>
 
 
-<div class="viewcode-block" id="touch"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.touch">[docs]</a><span class="k">def</span> <span class="nf">touch</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+
+<div class="viewcode-block" id="touch">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.touch">[docs]</a>
+<span class="k">def</span> <span class="nf">touch</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">utime</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="find_system_test"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.find_system_test">[docs]</a><span class="k">def</span> <span class="nf">find_system_test</span><span class="p">(</span><span class="n">testname</span><span class="p">,</span> <span class="n">case</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="find_system_test">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.find_system_test">[docs]</a>
+<span class="k">def</span> <span class="nf">find_system_test</span><span class="p">(</span><span class="n">testname</span><span class="p">,</span> <span class="n">case</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find and import the test matching testname</span>
 <span class="sd">    Look through the paths set in config_files.xml variable SYSTEM_TESTS_DIR</span>
 <span class="sd">    for components used in this case to find a test matching testname.  Add the</span>
@@ -2347,8 +2620,9 @@
     <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">_get_most_recent_lid_impl</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &gt;&gt;&gt; files = [&#39;/foo/bar/e3sm.log.20160905_111212&#39;, &#39;/foo/bar/e3sm.log.20160906_111212.gz&#39;]</span>
 <span class="sd">    &gt;&gt;&gt; _get_most_recent_lid_impl(files)</span>
 <span class="sd">    [&#39;20160905_111212&#39;, &#39;20160906_111212&#39;]</span>
@@ -2372,28 +2646,39 @@
     <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">results</span><span class="p">)))</span>
 
 
-<div class="viewcode-block" id="ls_sorted_by_mtime"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.ls_sorted_by_mtime">[docs]</a><span class="k">def</span> <span class="nf">ls_sorted_by_mtime</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;return list of path sorted by timestamp oldest first&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ls_sorted_by_mtime">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.ls_sorted_by_mtime">[docs]</a>
+<span class="k">def</span> <span class="nf">ls_sorted_by_mtime</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;return list of path sorted by timestamp oldest first&quot;&quot;&quot;</span>
     <span class="n">mtime</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span><span class="o">.</span><span class="n">st_mtime</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">mtime</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="get_lids"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_lids">[docs]</a><span class="k">def</span> <span class="nf">get_lids</span><span class="p">(</span><span class="n">case</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_lids">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_lids">[docs]</a>
+<span class="k">def</span> <span class="nf">get_lids</span><span class="p">(</span><span class="n">case</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="s2">&quot;MODEL&quot;</span><span class="p">)</span>
     <span class="n">rundir</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="s2">&quot;RUNDIR&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">_get_most_recent_lid_impl</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">.log*&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">rundir</span><span class="p">,</span> <span class="n">model</span><span class="p">)))</span></div>
 
 
-<div class="viewcode-block" id="new_lid"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.new_lid">[docs]</a><span class="k">def</span> <span class="nf">new_lid</span><span class="p">():</span>
+
+<div class="viewcode-block" id="new_lid">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.new_lid">[docs]</a>
+<span class="k">def</span> <span class="nf">new_lid</span><span class="p">(</span><span class="n">case</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">lid</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%y%m</span><span class="si">%d</span><span class="s2">-%H%M%S&quot;</span><span class="p">)</span>
-    <span class="n">jobid</span> <span class="o">=</span> <span class="n">batch_jobid</span><span class="p">()</span>
+    <span class="n">jobid</span> <span class="o">=</span> <span class="n">batch_jobid</span><span class="p">(</span><span class="n">case</span><span class="o">=</span><span class="n">case</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">jobid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">lid</span> <span class="o">=</span> <span class="n">jobid</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">lid</span>
     <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;LID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lid</span>
     <span class="k">return</span> <span class="n">lid</span></div>
 
 
-<div class="viewcode-block" id="batch_jobid"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.batch_jobid">[docs]</a><span class="k">def</span> <span class="nf">batch_jobid</span><span class="p">():</span>
+
+<div class="viewcode-block" id="batch_jobid">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.batch_jobid">[docs]</a>
+<span class="k">def</span> <span class="nf">batch_jobid</span><span class="p">(</span><span class="n">case</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">jobid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PBS_JOBID&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">jobid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">jobid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SLURM_JOB_ID&quot;</span><span class="p">)</span>
@@ -2401,11 +2686,16 @@
         <span class="n">jobid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LSB_JOBID&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">jobid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">jobid</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COBALT_JOBID&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">case</span><span class="p">:</span>
+        <span class="n">jobid</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">get_job_id</span><span class="p">(</span><span class="n">jobid</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">jobid</span></div>
 
 
-<div class="viewcode-block" id="analyze_build_log"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.analyze_build_log">[docs]</a><span class="k">def</span> <span class="nf">analyze_build_log</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">compiler</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="analyze_build_log">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.analyze_build_log">[docs]</a>
+<span class="k">def</span> <span class="nf">analyze_build_log</span><span class="p">(</span><span class="n">comp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">compiler</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Capture and report warning count,</span>
 <span class="sd">    capture and report errors and undefined references.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2437,7 +2727,10 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="is_python_executable"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.is_python_executable">[docs]</a><span class="k">def</span> <span class="nf">is_python_executable</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+
+<div class="viewcode-block" id="is_python_executable">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.is_python_executable">[docs]</a>
+<span class="k">def</span> <span class="nf">is_python_executable</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
     <span class="n">first_line</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -2454,21 +2747,30 @@
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="get_umask"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_umask">[docs]</a><span class="k">def</span> <span class="nf">get_umask</span><span class="p">():</span>
+
+<div class="viewcode-block" id="get_umask">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_umask">[docs]</a>
+<span class="k">def</span> <span class="nf">get_umask</span><span class="p">():</span>
     <span class="n">current_umask</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">umask</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">os</span><span class="o">.</span><span class="n">umask</span><span class="p">(</span><span class="n">current_umask</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">current_umask</span></div>
 
 
-<div class="viewcode-block" id="stringify_bool"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.stringify_bool">[docs]</a><span class="k">def</span> <span class="nf">stringify_bool</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+
+<div class="viewcode-block" id="stringify_bool">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.stringify_bool">[docs]</a>
+<span class="k">def</span> <span class="nf">stringify_bool</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
     <span class="n">val</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">val</span>
     <span class="n">expect</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">bool</span><span class="p">,</span> <span class="s2">&quot;Wrong type for val &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">val</span><span class="p">)))</span>
     <span class="k">return</span> <span class="s2">&quot;TRUE&quot;</span> <span class="k">if</span> <span class="n">val</span> <span class="k">else</span> <span class="s2">&quot;FALSE&quot;</span></div>
 
 
-<div class="viewcode-block" id="indent_string"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.indent_string">[docs]</a><span class="k">def</span> <span class="nf">indent_string</span><span class="p">(</span><span class="n">the_string</span><span class="p">,</span> <span class="n">indent_level</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Indents the given string by a given number of spaces</span>
+
+<div class="viewcode-block" id="indent_string">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.indent_string">[docs]</a>
+<span class="k">def</span> <span class="nf">indent_string</span><span class="p">(</span><span class="n">the_string</span><span class="p">,</span> <span class="n">indent_level</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Indents the given string by a given number of spaces</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">       the_string: str</span>
@@ -2486,15 +2788,21 @@
     <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines_indented</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="verbatim_success_msg"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.verbatim_success_msg">[docs]</a><span class="k">def</span> <span class="nf">verbatim_success_msg</span><span class="p">(</span><span class="n">return_val</span><span class="p">):</span>
+
+<div class="viewcode-block" id="verbatim_success_msg">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.verbatim_success_msg">[docs]</a>
+<span class="k">def</span> <span class="nf">verbatim_success_msg</span><span class="p">(</span><span class="n">return_val</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">return_val</span></div>
+
 
 
 <span class="n">CASE_SUCCESS</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span>
 <span class="n">CASE_FAILURE</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span>
 
 
-<div class="viewcode-block" id="run_and_log_case_status"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.run_and_log_case_status">[docs]</a><span class="k">def</span> <span class="nf">run_and_log_case_status</span><span class="p">(</span>
+<div class="viewcode-block" id="run_and_log_case_status">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.run_and_log_case_status">[docs]</a>
+<span class="k">def</span> <span class="nf">run_and_log_case_status</span><span class="p">(</span>
     <span class="n">func</span><span class="p">,</span>
     <span class="n">phase</span><span class="p">,</span>
     <span class="n">caseroot</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
@@ -2544,6 +2852,7 @@
     <span class="k">return</span> <span class="n">rv</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">_check_for_invalid_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="c1"># Prevent circular import</span>
     <span class="kn">from</span> <span class="nn">CIME.config</span> <span class="kn">import</span> <span class="n">Config</span>
@@ -2562,7 +2871,9 @@
                 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="add_mail_type_args"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.add_mail_type_args">[docs]</a><span class="k">def</span> <span class="nf">add_mail_type_args</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
+<div class="viewcode-block" id="add_mail_type_args">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.add_mail_type_args">[docs]</a>
+<span class="k">def</span> <span class="nf">add_mail_type_args</span><span class="p">(</span><span class="n">parser</span><span class="p">):</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--mail-user&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Email to be used for batch notification.&quot;</span><span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -2574,7 +2885,10 @@
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="resolve_mail_type_args"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.resolve_mail_type_args">[docs]</a><span class="k">def</span> <span class="nf">resolve_mail_type_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+
+<div class="viewcode-block" id="resolve_mail_type_args">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.resolve_mail_type_args">[docs]</a>
+<span class="k">def</span> <span class="nf">resolve_mail_type_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">mail_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">resolved_mail_types</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">mail_type</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">mail_type</span><span class="p">:</span>
@@ -2589,14 +2903,20 @@
         <span class="n">args</span><span class="o">.</span><span class="n">mail_type</span> <span class="o">=</span> <span class="n">resolved_mail_types</span></div>
 
 
-<div class="viewcode-block" id="copyifnewer"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.copyifnewer">[docs]</a><span class="k">def</span> <span class="nf">copyifnewer</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;if dest does not exist or is older than src copy src to dest&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="copyifnewer">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.copyifnewer">[docs]</a>
+<span class="k">def</span> <span class="nf">copyifnewer</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;if dest does not exist or is older than src copy src to dest&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">filecmp</span><span class="o">.</span><span class="n">cmp</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
         <span class="n">safe_copy</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="SharedArea"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.SharedArea">[docs]</a><span class="k">class</span> <span class="nc">SharedArea</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SharedArea">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.SharedArea">[docs]</a>
+<span class="k">class</span> <span class="nc">SharedArea</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Enable 0002 umask within this manager</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2611,8 +2931,11 @@
         <span class="n">os</span><span class="o">.</span><span class="n">umask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_orig_umask</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Timeout"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.Timeout">[docs]</a><span class="k">class</span> <span class="nc">Timeout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Timeout">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.Timeout">[docs]</a>
+<span class="k">class</span> <span class="nc">Timeout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A context manager that implements a timeout. By default, it</span>
 <span class="sd">    will raise exception, but a custon function call can be provided.</span>
 <span class="sd">    Provided None as seconds makes this class a no-op</span>
@@ -2635,14 +2958,20 @@
             <span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="filter_unicode"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.filter_unicode">[docs]</a><span class="k">def</span> <span class="nf">filter_unicode</span><span class="p">(</span><span class="n">unistr</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="filter_unicode">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.filter_unicode">[docs]</a>
+<span class="k">def</span> <span class="nf">filter_unicode</span><span class="p">(</span><span class="n">unistr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Sometimes unicode chars can cause problems</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">i</span> <span class="k">if</span> <span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">128</span> <span class="k">else</span> <span class="s2">&quot; &quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">unistr</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="run_bld_cmd_ensure_logging"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.run_bld_cmd_ensure_logging">[docs]</a><span class="k">def</span> <span class="nf">run_bld_cmd_ensure_logging</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">arg_logger</span><span class="p">,</span> <span class="n">from_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="run_bld_cmd_ensure_logging">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.run_bld_cmd_ensure_logging">[docs]</a>
+<span class="k">def</span> <span class="nf">run_bld_cmd_ensure_logging</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">arg_logger</span><span class="p">,</span> <span class="n">from_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">arg_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
     <span class="n">stat</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">errput</span> <span class="o">=</span> <span class="n">run_cmd</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">from_dir</span><span class="o">=</span><span class="n">from_dir</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
     <span class="n">arg_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
@@ -2650,12 +2979,18 @@
     <span class="n">expect</span><span class="p">(</span><span class="n">stat</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">filter_unicode</span><span class="p">(</span><span class="n">errput</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="get_batch_script_for_job"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_batch_script_for_job">[docs]</a><span class="k">def</span> <span class="nf">get_batch_script_for_job</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_batch_script_for_job">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_batch_script_for_job">[docs]</a>
+<span class="k">def</span> <span class="nf">get_batch_script_for_job</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">job</span> <span class="k">if</span> <span class="s2">&quot;st_archive&quot;</span> <span class="ow">in</span> <span class="n">job</span> <span class="k">else</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">job</span></div>
 
 
-<div class="viewcode-block" id="string_in_list"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.string_in_list">[docs]</a><span class="k">def</span> <span class="nf">string_in_list</span><span class="p">(</span><span class="n">_string</span><span class="p">,</span> <span class="n">_list</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Case insensitive search for string in list</span>
+
+<div class="viewcode-block" id="string_in_list">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.string_in_list">[docs]</a>
+<span class="k">def</span> <span class="nf">string_in_list</span><span class="p">(</span><span class="n">_string</span><span class="p">,</span> <span class="n">_list</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Case insensitive search for string in list</span>
 <span class="sd">    returns the matching list value</span>
 <span class="sd">    &gt;&gt;&gt; string_in_list(&quot;Brack&quot;,[&quot;bar&quot;, &quot;bracK&quot;, &quot;foo&quot;])</span>
 <span class="sd">    &#39;bracK&#39;</span>
@@ -2669,15 +3004,21 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="model_log"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.model_log">[docs]</a><span class="k">def</span> <span class="nf">model_log</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">arg_logger</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">debug_others</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+<div class="viewcode-block" id="model_log">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.model_log">[docs]</a>
+<span class="k">def</span> <span class="nf">model_log</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">arg_logger</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">debug_others</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">get_model</span><span class="p">()</span> <span class="o">==</span> <span class="n">model</span><span class="p">:</span>
         <span class="n">arg_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">debug_others</span><span class="p">:</span>
         <span class="n">arg_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_htmlroot"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_htmlroot">[docs]</a><span class="k">def</span> <span class="nf">get_htmlroot</span><span class="p">(</span><span class="n">machobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get location for test HTML output</span>
+
+<div class="viewcode-block" id="get_htmlroot">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_htmlroot">[docs]</a>
+<span class="k">def</span> <span class="nf">get_htmlroot</span><span class="p">(</span><span class="n">machobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get location for test HTML output</span>
 
 <span class="sd">    Hierarchy for choosing CIME_HTML_ROOT:</span>
 <span class="sd">    0. Environment variable CIME_HTML_ROOT</span>
@@ -2706,8 +3047,11 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="get_urlroot"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_urlroot">[docs]</a><span class="k">def</span> <span class="nf">get_urlroot</span><span class="p">(</span><span class="n">machobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Get URL to htmlroot</span>
+
+<div class="viewcode-block" id="get_urlroot">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.get_urlroot">[docs]</a>
+<span class="k">def</span> <span class="nf">get_urlroot</span><span class="p">(</span><span class="n">machobj</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get URL to htmlroot</span>
 
 <span class="sd">    Hierarchy for choosing CIME_URL_ROOT:</span>
 <span class="sd">    0. Environment variable CIME_URL_ROOT</span>
@@ -2736,7 +3080,10 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="clear_folder"><a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.clear_folder">[docs]</a><span class="k">def</span> <span class="nf">clear_folder</span><span class="p">(</span><span class="n">_dir</span><span class="p">):</span>
+
+<div class="viewcode-block" id="clear_folder">
+<a class="viewcode-back" href="../../CIME_api/CIME.html#CIME.utils.clear_folder">[docs]</a>
+<span class="k">def</span> <span class="nf">clear_folder</span><span class="p">(</span><span class="n">_dir</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">_dir</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">the_file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">_dir</span><span class="p">):</span>
             <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_dir</span><span class="p">,</span> <span class="n">the_file</span><span class="p">)</span>
@@ -2748,6 +3095,7 @@
                     <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
 </pre></div>
 
            </div>

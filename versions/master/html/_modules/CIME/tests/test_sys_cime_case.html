@@ -11,12 +11,11 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=30d551ce"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../../_static/pop_ver.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -28,14 +27,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> CIME
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            CIME
           </a>
               <div class="version">
                 master
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -69,9 +72,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>CIME.tests.test_sys_cime_case</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">CIME.tests.test_sys_cime_case</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -91,16 +94,22 @@
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">from</span> <span class="nn">CIME</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">CIME.config</span> <span class="kn">import</span> <span class="n">Config</span>
 <span class="kn">from</span> <span class="nn">CIME.tests</span> <span class="kn">import</span> <span class="n">base</span>
 <span class="kn">from</span> <span class="nn">CIME.case.case</span> <span class="kn">import</span> <span class="n">Case</span>
 <span class="kn">from</span> <span class="nn">CIME.XML.env_run</span> <span class="kn">import</span> <span class="n">EnvRun</span>
 
-<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">collectionsAbc</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span>
+<span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+    <span class="n">collectionsAbc</span> <span class="o">=</span> <span class="n">collections</span>
 
 
-<div class="viewcode-block" id="TestCimeCase"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase">[docs]</a><span class="k">class</span> <span class="nc">TestCimeCase</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">BaseTestCase</span><span class="p">):</span>
-<div class="viewcode-block" id="TestCimeCase.test_cime_case"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestCimeCase">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase">[docs]</a>
+<span class="k">class</span> <span class="nc">TestCimeCase</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">BaseTestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestCimeCase.test_cime_case">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">casedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span><span class="s2">&quot;--no-build&quot;</span><span class="p">,</span> <span class="s2">&quot;TESTRUNPASS_P1.f19_g16_rx1.A&quot;</span><span class="p">],</span> <span class="n">test_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_baseline_name</span>
         <span class="p">)</span>
@@ -138,6 +147,7 @@
             <span class="c1"># Test some test properties</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="s2">&quot;TESTCASE&quot;</span><span class="p">),</span> <span class="s2">&quot;TESTRUNPASS&quot;</span><span class="p">)</span></div>
 
+
     <span class="k">def</span> <span class="nf">_batch_test_fixture</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">testcase_name</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">MACHINE</span><span class="o">.</span><span class="n">has_batch_system</span><span class="p">()</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">NO_BATCH</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping testing user prerequisites without batch systems&quot;</span><span class="p">)</span>
@@ -147,7 +157,7 @@
         <span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;--case </span><span class="si">{name}</span><span class="s2"> --script-root </span><span class="si">{testdir}</span><span class="s2"> --compset X --res f19_g16 --handle-preexisting-dirs=r --output-root </span><span class="si">{testdir}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">testcase_name</span><span class="p">,</span> <span class="n">testdir</span><span class="o">=</span><span class="n">testdir</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">allow_unsupported</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">allow_unsupported</span><span class="p">:</span>
             <span class="n">args</span> <span class="o">+=</span> <span class="s2">&quot; --run-unsupported&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">run_cmd_assert_result</span><span class="p">(</span>
@@ -158,7 +168,9 @@
 
         <span class="k">return</span> <span class="n">testdir</span>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_prereq"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_prereq">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_prereq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_prereq">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_prereq">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_prereq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">testcase_name</span> <span class="o">=</span> <span class="s2">&quot;prereq_test&quot;</span>
         <span class="n">testdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_test_fixture</span><span class="p">(</span><span class="n">testcase_name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">Case</span><span class="p">(</span><span class="n">testdir</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">case</span><span class="p">:</span>
@@ -172,7 +184,7 @@
                 <span class="n">prereq</span><span class="o">=</span><span class="n">prereq_name</span><span class="p">,</span> <span class="n">job</span><span class="o">=</span><span class="n">job_name</span><span class="p">,</span> <span class="n">skip_pnl</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
-                <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_commands</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">),</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_commands</span><span class="p">,</span> <span class="n">collectionsAbc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">),</span>
                 <span class="s2">&quot;case.submit_jobs did not return a sequence for a dry run&quot;</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
@@ -185,7 +197,7 @@
             <span class="c1"># The prerequisite should be applied to all jobs, though we&#39;re only expecting one</span>
             <span class="k">for</span> <span class="n">batch_cmd</span> <span class="ow">in</span> <span class="n">batch_commands</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
-                    <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_cmd</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">),</span>
+                    <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_cmd</span><span class="p">,</span> <span class="n">collectionsAbc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">),</span>
                     <span class="s2">&quot;case.submit_jobs did not return a sequence of sequences&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
@@ -227,7 +239,10 @@
                     <span class="s2">&quot;Dependencies added, but not the user specified one&quot;</span><span class="p">,</span>
                 <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_allow_failed_prereq"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_allow_failed_prereq">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_allow_failed_prereq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_allow_failed_prereq">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_allow_failed_prereq">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_allow_failed_prereq</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">testcase_name</span> <span class="o">=</span> <span class="s2">&quot;allow_failed_prereq_test&quot;</span>
         <span class="n">testdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_test_fixture</span><span class="p">(</span><span class="n">testcase_name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">Case</span><span class="p">(</span><span class="n">testdir</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">case</span><span class="p">:</span>
@@ -247,7 +262,7 @@
                 <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
-                <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_commands</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">),</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_commands</span><span class="p">,</span> <span class="n">collectionsAbc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">),</span>
                 <span class="s2">&quot;case.submit_jobs did not return a sequence for a dry run&quot;</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">num_submissions</span> <span class="o">=</span> <span class="mi">1</span>
@@ -259,7 +274,10 @@
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">depend_allow</span> <span class="ow">in</span> <span class="n">batch_commands</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_resubmit_immediate"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_resubmit_immediate">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_resubmit_immediate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_resubmit_immediate">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_resubmit_immediate">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_resubmit_immediate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">testcase_name</span> <span class="o">=</span> <span class="s2">&quot;resubmit_immediate_test&quot;</span>
         <span class="n">testdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_test_fixture</span><span class="p">(</span><span class="n">testcase_name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">Case</span><span class="p">(</span><span class="n">testdir</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">case</span><span class="p">:</span>
@@ -276,7 +294,7 @@
                 <span class="n">job</span><span class="o">=</span><span class="n">job_name</span><span class="p">,</span> <span class="n">skip_pnl</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">resubmit_immediate</span><span class="o">=</span><span class="kc">True</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
-                <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_commands</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Sequence</span><span class="p">),</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">batch_commands</span><span class="p">,</span> <span class="n">collectionsAbc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">),</span>
                 <span class="s2">&quot;case.submit_jobs did not return a sequence for a dry run&quot;</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">case</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="s2">&quot;DOUT_S&quot;</span><span class="p">):</span>
@@ -291,7 +309,10 @@
                 <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">depend_string</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_st_archive_resubmit"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_st_archive_resubmit">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_st_archive_resubmit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_st_archive_resubmit">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_st_archive_resubmit">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_st_archive_resubmit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">testcase_name</span> <span class="o">=</span> <span class="s2">&quot;st_archive_resubmit_test&quot;</span>
         <span class="n">testdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_test_fixture</span><span class="p">(</span><span class="n">testcase_name</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">Case</span><span class="p">(</span><span class="n">testdir</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">case</span><span class="p">:</span>
@@ -310,7 +331,10 @@
                 <span class="s2">&quot;st_archive did not resubmit when told to&quot;</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_build_threaded_1"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_build_threaded_1">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_build_threaded_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_build_threaded_1">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_build_threaded_1">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_build_threaded_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">casedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span><span class="s2">&quot;--no-build&quot;</span><span class="p">,</span> <span class="s2">&quot;TESTRUNPASS_P1x1.f19_g16_rx1.A&quot;</span><span class="p">],</span>
             <span class="n">test_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_baseline_name</span><span class="p">,</span>
@@ -328,7 +352,10 @@
             <span class="n">build_threaded</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">get_build_threaded</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">build_threaded</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_build_threaded_2"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_build_threaded_2">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_build_threaded_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_build_threaded_2">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_build_threaded_2">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_build_threaded_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">casedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span><span class="s2">&quot;--no-build&quot;</span><span class="p">,</span> <span class="s2">&quot;TESTRUNPASS_P1x2.f19_g16_rx1.A&quot;</span><span class="p">],</span>
             <span class="n">test_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_baseline_name</span><span class="p">,</span>
@@ -341,7 +368,10 @@
             <span class="n">build_threaded</span> <span class="o">=</span> <span class="n">case</span><span class="o">.</span><span class="n">get_build_threaded</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">build_threaded</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_mpi_serial"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_mpi_serial">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_mpi_serial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_mpi_serial">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_mpi_serial">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_mpi_serial</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">casedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span><span class="s2">&quot;--no-build&quot;</span><span class="p">,</span> <span class="s2">&quot;TESTRUNPASS_Mmpi-serial_P10.f19_g16_rx1.A&quot;</span><span class="p">],</span>
             <span class="n">test_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_baseline_name</span><span class="p">,</span>
@@ -357,7 +387,10 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="s2">&quot;NTASKS_CPL&quot;</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_force_pecount"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_force_pecount">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_force_pecount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_force_pecount">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_force_pecount">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_force_pecount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">casedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="s2">&quot;--no-build&quot;</span><span class="p">,</span>
@@ -373,7 +406,10 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">case</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="s2">&quot;NTHRDS_CPL&quot;</span><span class="p">),</span> <span class="mi">8</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_xmlchange_append"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_xmlchange_append">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_xmlchange_append</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_xmlchange_append">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_xmlchange_append">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_xmlchange_append</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">casedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span><span class="s2">&quot;--no-build&quot;</span><span class="p">,</span> <span class="s2">&quot;TESTRUNPASS_P1x1.f19_g16_rx1.A&quot;</span><span class="p">],</span>
             <span class="n">test_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_baseline_name</span><span class="p">,</span>
@@ -395,8 +431,11 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;-opt1 -opt2&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_1"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_1">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_1">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_1">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping walltime test. Depends on E3SM batch settings&quot;</span><span class="p">)</span>
 
         <span class="n">test_name</span> <span class="o">=</span> <span class="s2">&quot;ERS.f19_g16_rx1.A&quot;</span>
@@ -417,8 +456,11 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;biggpu&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_2"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_2">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_2">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_2">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping walltime test. Depends on E3SM batch settings&quot;</span><span class="p">)</span>
 
         <span class="n">test_name</span> <span class="o">=</span> <span class="s2">&quot;ERS_P64.f19_g16_rx1.A&quot;</span>
@@ -439,8 +481,11 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;biggpu&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_3"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_3">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_3">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_3">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping walltime test. Depends on E3SM batch settings&quot;</span><span class="p">)</span>
 
         <span class="n">test_name</span> <span class="o">=</span> <span class="s2">&quot;ERS_P64.f19_g16_rx1.A&quot;</span>
@@ -467,8 +512,11 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;biggpu&quot;</span><span class="p">)</span>  <span class="c1"># Not smart enough to select faster queue</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_4"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_4">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_4">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_4">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_4</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping walltime test. Depends on E3SM batch settings&quot;</span><span class="p">)</span>
 
         <span class="n">test_name</span> <span class="o">=</span> <span class="s2">&quot;ERS_P1.f19_g16_rx1.A&quot;</span>
@@ -495,8 +543,11 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;biggpu&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_5"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_5">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_5">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_5">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_5</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping walltime test. Depends on E3SM batch settings&quot;</span><span class="p">)</span>
 
         <span class="n">test_name</span> <span class="o">=</span> <span class="s2">&quot;ERS_P1.f19_g16_rx1.A&quot;</span>
@@ -528,7 +579,10 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;slartibartfast&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_6"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_6">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_6</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_6">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_6">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_6</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hasbatch</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping walltime test. Depends on batch system&quot;</span><span class="p">)</span>
 
@@ -557,7 +611,10 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;421:32:11&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_7"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_7">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_7</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_7">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_7">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_7</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hasbatch</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping walltime test. Depends on batch system&quot;</span><span class="p">)</span>
 
@@ -586,8 +643,11 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;421:32:11&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_8"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_8">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_8</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_walltime_mgmt_8">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_walltime_mgmt_8">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_test_walltime_mgmt_8</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">test_mode</span> <span class="o">==</span> <span class="s2">&quot;cesm&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping walltime test. Depends on E3SM batch settings&quot;</span><span class="p">)</span>
 
         <span class="n">test_name</span> <span class="o">=</span> <span class="s2">&quot;SMS_P25600.f19_g16_rx1.A&quot;</span>
@@ -616,10 +676,13 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_custom_project"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_custom_project">[docs]</a>    <span class="k">def</span> <span class="nf">test_cime_case_test_custom_project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_cime_case_test_custom_project">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_cime_case_test_custom_project">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_cime_case_test_custom_project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">test_name</span> <span class="o">=</span> <span class="s2">&quot;ERS_P1.f19_g16_rx1.A&quot;</span>
         <span class="c1"># have to use a machine both models know and one that doesn&#39;t put PROJECT in any key paths</span>
-        <span class="n">machine</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">test_custom_project_machine</span>
+        <span class="n">machine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">test_custom_project_machine</span>
         <span class="n">compiler</span> <span class="o">=</span> <span class="s2">&quot;gnu&quot;</span>
         <span class="n">casedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span>
@@ -641,12 +704,18 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;testproj&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_create_test_longname"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_create_test_longname">[docs]</a>    <span class="k">def</span> <span class="nf">test_create_test_longname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_create_test_longname">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_create_test_longname">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_create_test_longname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span><span class="s2">&quot;SMS.f19_g16.2000_SATM_XLND_SICE_SOCN_XROF_XGLC_SWAV&quot;</span><span class="p">,</span> <span class="s2">&quot;--no-build&quot;</span><span class="p">]</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_env_loading"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_env_loading">[docs]</a>    <span class="k">def</span> <span class="nf">test_env_loading</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_env_loading">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_env_loading">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_env_loading</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_machine</span> <span class="o">!=</span> <span class="s2">&quot;mappy&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping env load test - Only works on mappy&quot;</span><span class="p">)</span>
 
@@ -690,7 +759,10 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">problems</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="o">=</span><span class="n">problems</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_case_submit_interface"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_case_submit_interface">[docs]</a>    <span class="k">def</span> <span class="nf">test_case_submit_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_case_submit_interface">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_case_submit_interface">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_case_submit_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># the current directory may not exist, so make sure we are in a real directory</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;HOME&quot;</span><span class="p">))</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TOOLS_DIR</span><span class="p">)</span>
@@ -709,7 +781,10 @@
         <span class="p">]</span>
         <span class="n">module</span><span class="o">.</span><span class="n">_main_func</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_xml_caching"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_xml_caching">[docs]</a>    <span class="k">def</span> <span class="nf">test_xml_caching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_xml_caching">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_xml_caching">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_xml_caching</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">casedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span><span class="s2">&quot;--no-build&quot;</span><span class="p">,</span> <span class="s2">&quot;TESTRUNPASS.f19_g16_rx1.A&quot;</span><span class="p">],</span> <span class="n">test_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_baseline_name</span>
         <span class="p">)</span>
@@ -772,7 +847,10 @@
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
             <span class="n">utils</span><span class="o">.</span><span class="n">safe_copy</span><span class="p">(</span><span class="n">backup</span><span class="p">,</span> <span class="n">active</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_configure"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_configure">[docs]</a>    <span class="k">def</span> <span class="nf">test_configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_configure">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_configure">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_configure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">testname</span> <span class="o">=</span> <span class="s2">&quot;SMS.f09_g16.X&quot;</span>
         <span class="n">casedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span><span class="n">testname</span><span class="p">,</span> <span class="s2">&quot;--no-build&quot;</span><span class="p">],</span> <span class="n">test_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_baseline_name</span>
@@ -798,7 +876,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">case_env_contents</span><span class="p">,</span> <span class="n">man_env_contents</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_self_build_cprnc"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_self_build_cprnc">[docs]</a>    <span class="k">def</span> <span class="nf">test_self_build_cprnc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_self_build_cprnc">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_self_build_cprnc">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_self_build_cprnc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">NO_FORTRAN_RUN</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">skipTest</span><span class="p">(</span><span class="s2">&quot;Skipping fortran test&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEST_COMPILER</span> <span class="ow">and</span> <span class="s2">&quot;gpu&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEST_COMPILER</span><span class="p">:</span>
@@ -817,7 +898,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_wait_for_tests</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_baseline_name</span><span class="p">,</span> <span class="n">always_wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TestCimeCase.test_case_clean"><a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_case_clean">[docs]</a>    <span class="k">def</span> <span class="nf">test_case_clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestCimeCase.test_case_clean">
+<a class="viewcode-back" href="../../../CIME_api/CIME.tests.html#CIME.tests.test_sys_cime_case.TestCimeCase.test_case_clean">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_case_clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">testname</span> <span class="o">=</span> <span class="s2">&quot;ERS_Ln7.f19_g16_rx1.A&quot;</span>
         <span class="n">casedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_test</span><span class="p">(</span>
             <span class="p">[</span><span class="n">testname</span><span class="p">,</span> <span class="s2">&quot;--no-build&quot;</span><span class="p">],</span> <span class="n">test_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_baseline_name</span>
@@ -825,7 +909,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">run_cmd_assert_result</span><span class="p">(</span><span class="s2">&quot;./case.setup --clean&quot;</span><span class="p">,</span> <span class="n">from_dir</span><span class="o">=</span><span class="n">casedir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">run_cmd_assert_result</span><span class="p">(</span><span class="s2">&quot;./case.setup --clean&quot;</span><span class="p">,</span> <span class="n">from_dir</span><span class="o">=</span><span class="n">casedir</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">run_cmd_assert_result</span><span class="p">(</span><span class="s2">&quot;./case.setup&quot;</span><span class="p">,</span> <span class="n">from_dir</span><span class="o">=</span><span class="n">casedir</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_cmd_assert_result</span><span class="p">(</span><span class="s2">&quot;./case.setup&quot;</span><span class="p">,</span> <span class="n">from_dir</span><span class="o">=</span><span class="n">casedir</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>
