@@ -2260,6 +2260,7 @@ This allows using a different mpirun command to launch unit tests
 
   <machine MACH="fram">
     <DESC>Lenovo NeXtScale M5, 32-way nodes, dual 16-core Xeon E5-2683@2.10GHz, 64 GiB per node, os is Linux, batch system is SLURM</DESC>
+    <NODENAME_REGEX>.*.?fram\d?.sigma2.no</NODENAME_REGEX>
     <OS>LINUX</OS>
     <COMPILERS>intel</COMPILERS>
     <MPILIBS>impi</MPILIBS>
