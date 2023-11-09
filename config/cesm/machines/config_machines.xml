@@ -2271,8 +2271,8 @@ This allows using a different mpirun command to launch unit tests
     <DOUT_L_ROOT>/projects/NS2345K/noresm/cases</DOUT_L_ROOT>
     <DOUT_L_HOSTNAME>login.nird.sigma2.no</DOUT_L_HOSTNAME>
     <!--DOUT_L_MSROOT>UNSET</DOUT_L_MSROOT-->
-    <BASELINE_ROOT>UNSET</BASELINE_ROOT>
-    <CCSM_CPRNC>UNSET</CCSM_CPRNC>
+    <BASELINE_ROOT>/cluster/shared/noresm/noresm_baselines0</BASELINE_ROOT>
+    <CCSM_CPRNC>/cluster/shared/noresm/tools/cprnc/cprnc</CCSM_CPRNC>
     <GMAKE_J>8</GMAKE_J>
     <BATCH_SYSTEM>slurm</BATCH_SYSTEM>
     <SUPPORTED_BY>noresmCommunity</SUPPORTED_BY>
@@ -2333,8 +2333,8 @@ This allows using a different mpirun command to launch unit tests
     <DOUT_S_ROOT>/cluster/work/users/$USER/archive/$CASE</DOUT_S_ROOT>
     <DOUT_L_ROOT>/projects/NS2345K/noresm/cases</DOUT_L_ROOT>
     <DOUT_L_HOSTNAME>login.nird.sigma2.no</DOUT_L_HOSTNAME>
-    <BASELINE_ROOT>UNSET</BASELINE_ROOT>
-    <CCSM_CPRNC>UNSET</CCSM_CPRNC>
+    <BASELINE_ROOT>/cluster/shared/noresm/noresm_baselines</BASELINE_ROOT>
+    <CCSM_CPRNC>/cluster/shared/noresm/tools/cprnc/cprnc</CCSM_CPRNC>
     <GMAKE_J>8</GMAKE_J>
     <BATCH_SYSTEM>slurm_nor</BATCH_SYSTEM>
     <SUPPORTED_BY>noresmCommunity</SUPPORTED_BY>
