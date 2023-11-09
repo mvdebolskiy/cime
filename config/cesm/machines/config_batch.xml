@@ -599,7 +599,6 @@
     </directives>
     <directives queue = "preproc">
       <directive> --partition=preproc</directive>
-      <directive> --mem=16G</directive>
     </directives>
     <queues>
       <queue walltimemax="00:59:00" nodemin="4" nodemax="1024" default="true">normal</queue>
