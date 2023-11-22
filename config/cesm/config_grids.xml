@@ -1246,6 +1246,8 @@
       <file grid="atm|lnd" mask="tnx0.25v1">domain.lnd.fv0.9x1.25_tnx0.25v1.140618.nc</file>
       <file grid="ocnice"  mask="tnx0.25v1">domain.ocn.0.9x1.25_tnx0.25v1.140618.nc</file>
 
+      <!-- NOTE: the following do not have valid domain files for ocn/ice and so are commented out -->
+
       <!-- <file grid="atm|lnd" mask="tnx0.25v3">domain.lnd.fv0.9x1.25_tnx0.25v3.170629.nc</file> -->
       <!-- <file grid="ocnice"  mask="tnx0.25v3"></file> -->
 
