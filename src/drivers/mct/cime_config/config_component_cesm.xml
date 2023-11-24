@@ -232,6 +232,7 @@
       <value compset="_CAM\d+%WCBC">144</value>
       <value compset="_CAM\d+%WCMX">288</value>
       <value compset="_CAM\d+%WCXI">288</value>
+      <value compset="_CAM40%WX">288</value>
       <value compset="_DATM%COPYALL_NPS">72</value>
       <value compset="_DATM.*_CLM">48</value>
       <value compset="_DATM.*_DICE.*_POP2">4</value>
