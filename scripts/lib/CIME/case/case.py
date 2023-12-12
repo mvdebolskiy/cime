@@ -1335,12 +1335,14 @@ directory, NOT in this subdirectory."""
             tests = Testlist(tests_spec_file, files)
             testlist = tests.get_tests(compset=compset_alias, grid=grid_name, supported_only=True)
             for test in testlist:
-                if test["category"] == "prealpha" or test["category"] == "prebeta" or "aux_" in test["category"]:
+                if any([x in test["category"] for x in ("prealpha_noresm", "aux_")]):
                     testcnt += 1
+
         if testcnt > 0:
-            logger.warning("\n*********************************************************************************************************************************")
-            logger.warning("This compset and grid combination is not scientifically supported, however it is used in {:d} tests.".format(testcnt))
-            logger.warning("*********************************************************************************************************************************\n")
+            wmsg=f"This compset and grid combination is not scientifically supported, however it is used in {testcnt:d} tests."
+            logger.warning(f"\n{'*'*len(wmsg)}")
+            logger.warning(wmsg)
+            logger.warning(f"{'*'*len(wmsg)}\n")
         else:
             expect(False, "\nThis compset and grid combination is untested in CESM.  "
                    "Override this warning with the --run-unsupported option to create_newcase.",
