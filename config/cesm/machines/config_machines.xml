@@ -2334,7 +2334,7 @@ This allows using a different mpirun command to launch unit tests
     <DOUT_L_ROOT>/projects/NS2345K/noresm/cases</DOUT_L_ROOT>
     <DOUT_L_HOSTNAME>login.nird.sigma2.no</DOUT_L_HOSTNAME>
     <BASELINE_ROOT>/cluster/shared/noresm/noresm_baselines</BASELINE_ROOT>
-    <CCSM_CPRNC>/cluster/shared/noresm/tools/cprnc-iompi-2020a/cprnc</CCSM_CPRNC>
+    <CCSM_CPRNC>/cluster/shared/noresm/tools/cprnc-iompi-2022a/cprnc</CCSM_CPRNC>
     <GMAKE_J>8</GMAKE_J>
     <BATCH_SYSTEM>slurm_nor</BATCH_SYSTEM>
     <SUPPORTED_BY>noresmCommunity</SUPPORTED_BY>
