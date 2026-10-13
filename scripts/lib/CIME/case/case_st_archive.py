@@ -12,6 +12,8 @@ from CIME.date                      import get_file_date
 from CIME.XML.archive       import Archive
 from CIME.XML.files            import Files
 from os.path                        import isdir, join
+import resource
+import sys
 
 logger = logging.getLogger(__name__)
 
@@ -710,6 +712,8 @@ def case_st_archive(self, last_date_str=None, archive_incomplete_logs=True, copy
     """
     Create archive object and perform short term archiving
     """
+    if "fram" in self.get_value("MACH") or "betzy" in self.get_value("MACH"):
+        resource.setrlimit(resource.RLIMIT_STACK, [-1, -1])
     logger.debug("resubmit {}".format(resubmit))
     caseroot = self.get_value("CASEROOT")
     self.load_env(job="case.st_archive")
@@ -757,6 +761,10 @@ def case_st_archive(self, last_date_str=None, archive_incomplete_logs=True, copy
                 run_cmd("ssh cooleylogin1 ssh {} '{case}/case.submit {case} --resubmit' "\
                         .format(sshhost, case=caseroot), verbose=True)
             else:
+                if self.get_value("MACH") == "betzy":
+                    logger.info("remove environment variable")
+                    os.unsetenv('SLURM_MEM_PER_GPU')
+                    os.unsetenv('SLURM_MEM_PER_CPU')
                 self.submit(resubmit=True)
 
     return True

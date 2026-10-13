@@ -12,6 +12,8 @@ from CIME.XML.standard_module_setup import *
 from CIME.utils                     import expect, run_and_log_case_status, verbatim_success_msg
 from CIME.locked_files              import unlock_file, lock_file
 from CIME.test_status               import *
+import resource
+import sys
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +27,9 @@ def _build_prereq_str(case, prev_job_ids):
 def _submit(case, job=None, no_batch=False, prereq=None, allow_fail=False, resubmit=False,
             resubmit_immediate=False, skip_pnl=False, mail_user=None, mail_type=None,
             batch_args=None):
+    if "fram" in case.get_value("MACH") or "betzy" in case.get_value("MACH"):
+        resource.setrlimit(resource.RLIMIT_STACK, [-1, -1])
+
     if job is None:
         job = case.get_first_job()
 
