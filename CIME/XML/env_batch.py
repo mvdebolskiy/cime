@@ -367,8 +367,10 @@ class EnvBatch(EnvBase):
                     node_count = 1
                 else:
                     task_count = int(task_count)
+
                     node_count = int(
-                        math.ceil(float(task_count) / float(case.tasks_per_node))
+                        math.ceil(float(task_count) / float((jsect["tasks_per_node"] 
+                                                      if "tasks_per_node" in jsect else jsect["tasks_per_node"])))
                     )
             else:
                 task_count = case.total_tasks
